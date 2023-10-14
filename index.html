@@ -3,28 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles.css">
-    <title>Real-Time Counter</title>
+    <title>Dynamic Website</title>
 </head>
-<body>
-    <h1>TEST: <span id="counter">0</span></h1>
-    <button id="incrementButton">More</button>
+<body style="text-align: center;">
+    <button onclick="changeScreen('screen1')">Go to Screen 1</button>
+    <button onclick="changeScreen('screen2')">Go to Screen 2</button>
+    <button onclick="changeScreen('screen3')">Go to Screen 3</button>
+
+    <div id="app">
+        <h1 id="message"></h1>
+        <button onclick="changeMessage()">Change Message</button>
+    </div>
+
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const socket = io.connect();
-            const counterElem = document.getElementById('counter');
-            const button = document.getElementById('incrementButton');
-            
-            socket.on('counterUpdate', (newCount) => {
-                counterElem.innerText = newCount;
-            });
-            
-            button.addEventListener('click', () => {
-                socket.emit('incrementCounter');
-            }); 
+        const socket = io();
+
+        socket.on('stateUpdate', (state) => {
+        const appDiv = document.getElementById('app');
+        const messageH1 = document.getElementById('message');
+
+        // Extract the current screen state
+        const currentScreenState = state.screens[state.currentScreen];
+
+        // Update the UI
+        appDiv.style.backgroundColor = currentScreenState.color;
+        messageH1.innerText = currentScreenState.message;
         });
+        
+        function changeScreen(screenName) {
+            socket.emit('changeScreen', screenName);
+        }
+
+        function changeState() {
+            socket.emit('changeState', { counter: document.getElementById('counter').innerText.replace('Counter: ', '') * 1 + 1 });
+        }
+
+        function changeMessage() {
+            const newMessage = prompt("Enter new message:");
+            socket.emit('changeState', {
+            screens: {
+                [state.currentScreen]: { message: newMessage }
+            }
+        });
+}
     </script>
 </body>
 </html>
