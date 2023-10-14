@@ -1,17 +1,33 @@
-@font-face {
-    font-family: "font";
-    src: url("assets/font.ttf");
-}
-
 body {
     font-family: "font";
-    background-color: red;
+    background-color: "red";
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
     margin: 0;
+}
+
+.state {
+    display: none;
+}
+
+.state.active {
+    display: block;
+    background-color: #312783;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50vmin; /* 50% of the smallest viewport dimension */
+    height: 50vmin; /* 50% of the smallest viewport dimension */
+    border-radius: 50%; /* make it circular */
+    margin: auto; /* center the circle in the container */
+    max-width: 100%; /* ensure it doesn't overflow horizontally */
+    max-height: 100vh; /* ensure it doesn't overflow vertically */
+    box-sizing: border-box; /* ensure padding and border are included in the size */
+    position: relative; /* relative positioning for inner content */
+    text-align: center; /* center text */
 }
 
 h1 {

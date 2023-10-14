@@ -1,53 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Website</title>
-</head>
-<body style="text-align: center;">
-    <button onclick="changeScreen('screen1')">Go to Screen 1</button>
-    <button onclick="changeScreen('screen2')">Go to Screen 2</button>
-    <button onclick="changeScreen('screen3')">Go to Screen 3</button>
+    
+    <title>Waardenzegger 2.0</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 
-    <div id="app">
-        <h1 id="message"></h1>
-        <button onclick="changeMessage()">Change Message</button>
+</head>
+
+<body style="text-align: center;">
+
+    <button onclick="simulateSensorActivation()">capSense 1</button>
+
+    <div class="backgroundHandler">
+
+        <!-- State 1 -->
+        <div id="state1" class="state">
+            <h1>State 1</h1>
+            <button onclick="nextButtonPressed()">Start</button>
+        </div>
+
+        <!-- State 2 -->
+        <div id="state2" class="state">
+            <h1>State 2</h1>
+            <p>Hand position: <span id="handPosition">Not detected</span></p>
+        </div>
+
+        <!-- State 3 -->
+        <div id="state3" class="state">
+            <h1>Selecting Participant...</h1>
+            <!-- Maybe some animation or additional UI -->
+        </div>
+
+        <!-- More States... -->
+        <!-- Construct similar blocks for other states, adapted to their UI requirements -->
+
     </div>
 
-
+    <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        console.log("Yes let's go!")
+
         const socket = io();
 
-        socket.on('stateUpdate', (state) => {
-        const appDiv = document.getElementById('app');
-        const messageH1 = document.getElementById('message');
+        socket.on('stateUpdate', (newState) => {
+            // Hide all states
+            document.querySelectorAll('.state').forEach(el => el.classList.remove('active'));
+            // Show the current state
+            document.getElementById(newState.name).classList.add('active');
+            // Additional UI logic, if needed, depending on newState
 
-        // Extract the current screen state
-        const currentScreenState = state.screens[state.currentScreen];
-
-        // Update the UI
-        appDiv.style.backgroundColor = currentScreenState.color;
-        messageH1.innerText = currentScreenState.message;
+            //Log the current state
+            console.log(`Moved to state: ${newState.name}`);
         });
-        
-        function changeScreen(screenName) {
-            socket.emit('changeScreen', screenName);
+
+        function nextButtonPressed() {
+            socket.emit('buttonPress');
         }
 
-        function changeState() {
-            socket.emit('changeState', { counter: document.getElementById('counter').innerText.replace('Counter: ', '') * 1 + 1 });
+        function simulateSensorActivation() {
+            console.log("Emitting: simulateSensorActivation");
+            socket.emit('simulateSensorActivation', 1);
         }
 
-        function changeMessage() {
-            const newMessage = prompt("Enter new message:");
-            socket.emit('changeState', {
-            screens: {
-                [state.currentScreen]: { message: newMessage }
-            }
+        socket.on('sensorActivated', (sensorId) => {
+            // Example: update the UI in state 2
+            document.getElementById('handPosition').innerText = `Detected on sensor ${sensorId}`;
         });
-}
+
+            // Implement more functions as per interactions required by other states
     </script>
 </body>
+
 </html>
