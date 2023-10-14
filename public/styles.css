@@ -1,0 +1,19 @@
+@font-face {
+    font-family: "font";
+    src: url("assets/font.ttf");
+}
+
+body {
+    font-family: "font";
+    background-color: #312783;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    color: white;
+}
