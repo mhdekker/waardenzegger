@@ -139,6 +139,7 @@ const stateTransition = (currentStateName, nextStateName) => {
     if (nextState.nextAction === 'timer' && nextState.timerDuration) {
         setTimeout(() => {
             // Recursively transition to the next state after timer duration
+            console.log('Timer elapsed, transitioning to:', state.states[state.currentState]);
             stateTransition(nextStateName, getNextStateName(nextStateName)); // define the function to get the name of the next state based on current state
         }, nextState.timerDuration);
     }
@@ -163,6 +164,7 @@ function getNextStateName(currentStateName) {
 io.on('connection', (socket) => {
     // Send the initial state
     socket.emit('stateUpdate', state.states[state.currentState]);
+    console.log('Server emitted stateUpdate:', state.states[state.currentState]);
 
     // Listen for a button press and move to the next state if applicable
     socket.on('buttonPress', () => {
