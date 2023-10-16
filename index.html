@@ -12,27 +12,103 @@
 
 <body style="text-align: center;">
 
-    <button onclick="simulateSensorActivation()">capSense 1</button>
+    <button onclick="simulateSensorActivation(1)">capSense 1</button>
+    <button onclick="simulateSensorActivation(2)">capSense 2</button>
+    <button onclick="simulateSensorActivation(2)">capSense 3</button>
+    <button onclick="simulateSensorActivation(2)">capSense 4</button>
 
     <div class="backgroundHandler">
 
+        <!-- State 0 -->
+        <div id="state0" class="state">
+            <h1>Ben je er nog?</h1>
+            <button onclick="nextButtonPressed()">Ja</button>
+        </div>
+
         <!-- State 1 -->
-        <div id="state1" class="state">
-            <h1>State 1</h1>
+        <div id="state1" class="state active">
+            <h1>Welkom bij de Waardenzegger</h1>
+            <h1>Laat je waarden spreken in Digitale Dilemma’s</h1>
+            <h1>Speel met 2 tot 4 vrienden!</h1>
             <button onclick="nextButtonPressed()">Start</button>
         </div>
 
         <!-- State 2 -->
         <div id="state2" class="state">
-            <h1>State 2</h1>
-            <p>Hand position: <span id="handPosition">Not detected</span></p>
+            <h1>Leg jullie hand op de paarse hand voor je</h1>
+            <h1>De Waardenzegging gaat nu beginnen!</h1>
         </div>
 
         <!-- State 3 -->
         <div id="state3" class="state">
-            <h1>Selecting Participant...</h1>
-            <!-- Maybe some animation or additional UI -->
+            <p>* pijltje draait rond *</p>
         </div>
+
+        <!-- State 4 -->
+        <div id="state4" class="state">
+            <h1>Kies één van de twee dilemma’s</h1>
+            <button onclick="nextButtonPressed()">Dillema 1</button>
+            <button onclick="nextButtonPressed()">Dillema 2</button>
+        </div>
+
+        <!-- State 5 -->
+        <div id="state5" class="state">
+            <h1>Vertel de anderen waarom je hiervoor kiest</h1>
+            <button onclick="nextButtonPressed()">Ga verder</button>
+        </div>
+
+        <!-- State 6 -->
+        <div id="state6" class="state">
+            <h1>Draai nu aan de waardenschijf</h1>
+        </div>
+
+        <!-- State 7 -->
+        <div id="state7" class="state">
+            <h1>Bekijk welke waarde voor jou ligt</h1>
+        </div>
+
+        <!-- State 8 -->
+        <div id="state8" class="state">
+            <h1>Komt deze waarde positief of negatief naar voren in dit dilemma?</h1>
+            <h1>Geef antwoord met een duimpje voor je</h1>
+            <button onclick="nextButtonPressed()">Duimpje omhoog</button>
+            <button onclick="nextButtonPressed()">Duimpje omlaag</button>
+        </div>
+
+        <!-- State 9 -->
+        <div id="state9" class="state">
+            <h1>Leg jullie handen weer op de paarse hand</h1>
+        </div>
+
+        <!-- State 10 -->
+        <div id="state10" class="state">
+            <h1>Stel je voor: jij vindt de waarde voor je super belangrijk</h1>
+            <h1>Hoe ga jij dan met dit dilemma om?</h1>
+            <button onclick="nextButtonPressed()">Verder</button>
+        </div>
+
+        <!-- State 11 -->
+        <div id="state11" class="state">
+            <h1>Wie zijn er allemaal bij dit dilemma betrokken?</h1>
+            <h1>Vertel de anderen kort waarom</h1>
+            <button onclick="nextButtonPressed()">Verder</button>
+        </div>
+
+        <!-- State 12 -->
+        <div id="state12" class="state">
+            <h1>Tijd om de Waardenzegger te voeden</h1>
+            <h1>Welk digitaal dilemma hebben jullie zelf weleens meegemaakt?</h1>
+            <form>
+                <input type="text" id="fname" name="fname" placeholder="Typ hier het dillema kort in"><br><br>
+            </form>
+            <button onclick="nextButtonPressed()">Verder</button>
+        </div>
+
+        <!-- State 13 -->
+        <div id="state13" class="state">
+            <h1>Bedankt! #dewaardenzegger</h1>
+        </div>
+
 
         <!-- More States... -->
         <!-- Construct similar blocks for other states, adapted to their UI requirements -->
@@ -41,35 +117,46 @@
 
     <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         console.log("Yes let's go!")
 
         const socket = io();
 
         socket.on('stateUpdate', (newState) => {
+            console.log('Start fade-out');
+
+            $('.state.active').fadeOut('5000', function() {
+                //Update the UI based on the new stat
+                updateUI(newState);
+
+                //Log the current state
+                console.log(`Moved to state: ${newState.name}`);
+
+                // Fade in the new state
+                
+            });
+        });
+
+        // Function to update UI
+        function updateUI(state) {
             // Hide all states
             document.querySelectorAll('.state').forEach(el => el.classList.remove('active'));
+            
             // Show the current state
-            document.getElementById(newState.name).classList.add('active');
-            // Additional UI logic, if needed, depending on newState
+            document.getElementById(state.name).classList.add('active');
 
-            //Log the current state
-            console.log(`Moved to state: ${newState.name}`);
-        });
+            $('.state.active').fadeIn('5000');
+        }
 
         function nextButtonPressed() {
             socket.emit('buttonPress');
         }
 
-        function simulateSensorActivation() {
-            console.log("Emitting: simulateSensorActivation");
-            socket.emit('simulateSensorActivation', 1);
+        function simulateSensorActivation(sensorValue) {
+            console.log("Emitting: simulateSensorActivation with value: " + sensorValue);
+            socket.emit('simulateSensorActivation', sensorValue);
         }
-
-        socket.on('sensorActivated', (sensorId) => {
-            // Example: update the UI in state 2
-            document.getElementById('handPosition').innerText = `Detected on sensor ${sensorId}`;
-        });
 
             // Implement more functions as per interactions required by other states
     </script>

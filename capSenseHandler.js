@@ -6,7 +6,7 @@ class CapSenseHandler extends EventEmitter {
   }
 
   activateSensor(sensorId) {
-    console.log(`Sensor ${sensorId} activated`);
+    console.log(`2 - Sensor ${sensorId} activated`);
     this.emit('sensorActivated', sensorId);
   }
 }
