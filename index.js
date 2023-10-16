@@ -10,6 +10,10 @@ const capSenseHandler = new CapSenseHandler();
 
 let stateTimeout; 
 
+//capsense logic
+let activeSensors = {};
+let touchCheckTimeout = null;
+
 app.use(express.static('public'));
 
 let state = {
@@ -35,7 +39,8 @@ let state = {
             name: 'state2',
             color: 'blue',
             text: 'Leg je hand op de paarse hand voor je',
-            nextAction: 'sensorTouch'  // A simulated sensor input triggers the next state
+            nextAction: 'timerTouch',  // A simulated sensor input triggers the next state
+            timerDuration: 1500
         },
         state3: {
             //De waardenzegger kiest 1 deelnemer uit om een dilemma te kiezen 
@@ -132,6 +137,11 @@ const stateTransition = (currentStateName, nextStateName) => {
         return;
     }
 
+    //check for timerTouch
+    if (nextState.nextAction === 'timerTouch') {
+        startTimerTouch();
+    }
+
     // Immediately update the current state and inform all clients
     state.currentState = nextStateName;
     io.emit('stateUpdate', nextState);
@@ -149,10 +159,12 @@ const stateTransition = (currentStateName, nextStateName) => {
 
     // Reset the global timeout every time a state transition occurs
     clearTimeout(stateTimeout);  // Clear any existing timeout
-    stateTimeout = setTimeout(() => {
-        console.log('90s timeout elapsed, transitioning to: state0');
-        stateTransition(state.currentState, 'state0');  // Transition to state0 after 90 seconds
-    }, 90000);  // Set new timeout for 90 seconds
+    if (nextStateName !== 'state1') { 
+        stateTimeout = setTimeout(() => {
+            console.log('90s timeout elapsed, transitioning to: state0');
+            stateTransition(state.currentState, 'state0');  // Transition to state0 after 90 seconds
+        }, 90000);  // Set new timeout for 90 seconds
+    }
 };
 
 function getNextStateName(currentStateName) {
@@ -171,6 +183,40 @@ function getNextStateName(currentStateName) {
     }
 }
 
+function startTimerTouch() {
+    console.log('Starting 15-second timer for sensor touch check');
+    touchCheckTimeout = setTimeout(() => {
+        // After 15 seconds, decide the next state based on sensors touched
+        checkSensorsAfterTime();
+    }, 15000);  // 15 seconds
+}
+
+function checkSensorsAfterTime() {
+    const touchedSensorsCount = Object.keys(activeSensors).length;
+
+    // Build the sensor touch status array
+    const sensorsStatus = [];
+    for (let i = 0; i <= 3; i++) {
+        sensorsStatus[i] = activeSensors[i] ? 1 : 0;
+    }
+
+    // Log the sensor touch status
+    console.log(`Sensor touch status: [${sensorsStatus.join(', ')}]`);
+
+    // Decide the next state based on the number of sensors touched
+    if (touchedSensorsCount <= 1) {
+        console.log('Transitioning back to state1 due to insufficient touches');
+        stateTransition(state.currentState, 'state1');
+    } else {
+        console.log('Enough sensors touched. Transitioning to the next state.');
+        stateTransition(state.currentState, getNextStateName(state.currentState));
+    }
+
+    // Reset the touch check state
+    activeSensors = {};
+    touchCheckTimeout = null;
+}
+
 io.on('connection', (socket) => {
     // Send the initial state
     socket.emit('stateUpdate', state.states[state.currentState]);
@@ -183,21 +229,8 @@ io.on('connection', (socket) => {
     });
 
     capSenseHandler.on('sensorActivated', (sensorId) => {
-        console.log('3 - Got it! Sensor: ', sensorId);
-        const currentState = state.states[state.currentState];
-
-        // Check if the current state expects a sensor activation for transitioning
-        if (currentState.nextAction === 'sensorTouch') {
-            console.log('4 - Transition from: ', currentState, ' to: ', getNextStateName(state.currentState));
-            stateTransition(state.currentState, getNextStateName(state.currentState));
-        }
+        activeSensors[sensorId] = true;  // Mark the sensor as touched
     });
-    
-    socket.on('simulateSensorActivation', (sensorId) => {
-        console.log("1 - Simulated sensor activation for sensor", sensorId);
-        capSenseHandler.activateSensor(sensorId);
-    });
-
 });
 
 app.get('/', (req, res) => {
