@@ -1,6 +1,19 @@
 import time
 from rpi_ws281x import PixelStrip, Color
 
+# GPIO4
+# GPIO17
+# GPIO27
+# GPIO22
+# GPIO10 (SPI_MOSI if you're not using SPI)
+# GPIO9 (SPI_MISO if you're not using SPI)
+# GPIO11 (SPI_CLK if you're not using SPI)
+# GPIO5
+# GPIO6
+# GPIO13
+# GPIO19 (SPI_MISO if you're not using both SPI channels)
+# GPIO26
+
 # LED strip configuration:
 LED_COUNT = 8        # Number of LEDs
 LED_PIN = 18         # GPIO pin (must support PWM)
