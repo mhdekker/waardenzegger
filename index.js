@@ -2,6 +2,9 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const CapSenseHandler = require('./capSenseHandler');
+const path = require('path');
+const fs = require('fs');
+const { randomInt } = require('crypto');
 
 const app = express();
 const server = http.createServer(app);
@@ -13,11 +16,53 @@ let stateTimeout;
 //capsense logic
 let activeSensors = {};
 let touchCheckTimeout = null;
+let chosenOne;
+let dillemaOption1;
+let dillemaOption2;
+let chosenDillema;
 
 app.use(express.static('public'));
 
+// Optional: Explicitly set up route for node_modules if you need to serve files directly from it
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
+
+function formatTextWithNumbersFromFile(filePath) {
+    // Read the file content
+    const text = fs.readFileSync(filePath, 'utf8');
+    // Format the text
+    return text.replace(/(\d+)\.\s+/g, '$1. ');
+  }
+  
+// Example usage:
+const filePath = "public/assets/dillema's/dillemas.txt"; // Replace with your text file's path
+const formattedText = formatTextWithNumbersFromFile(filePath);
+console.log(formattedText);
+
+function pickNewDilemmas() {
+    dillemaOption1 = randomInt(1, 24); // randomInt is inclusive of the min and exclusive of the max
+    do {
+        dillemaOption2 = randomInt(1, 24);
+    } while (dillemaOption1 === dillemaOption2);
+    
+    var dillemas = [dillemaOption1, dillemaOption2];
+
+    io.emit('dillemas', dillemas);
+    console.log("Dillema's set! " + dillemas);
+}
+
+// Call the function once to set the initial dilemmas
+pickNewDilemmas();
+
+function test() {
+    var test = "hello world";
+    io.emit('test', test);
+    console.log("test " + test);
+}
+
+test();
+
 let state = {
-    currentState: 'state1',
+    currentState: 'state4',
     states: {
         state0: {
             //Time out
@@ -41,6 +86,7 @@ let state = {
             text: 'Leg je hand op de paarse hand voor je',
             nextAction: 'timerTouch',  // A simulated sensor input triggers the next state
             timerDuration: 1500
+            //nextAction: 'buttonPress'  // Defines what should trigger the next state
         },
         state3: {
             //De waardenzegger kiest 1 deelnemer uit om een dilemma te kiezen 
@@ -55,7 +101,7 @@ let state = {
             name: 'state4',
             color: 'blue',
             text: 'Kies dillema',
-            nextAction: 'buttonPress'
+            nextAction: 'buttonPressDillema'
         },
         state5: {
             //Beargumenteer de keuze voor het dilemma
@@ -111,16 +157,16 @@ let state = {
             nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
             timerDuration: 10000        // 10 seconds
         },
+        // state12: {
+        //     //Zelf een dillema toevoegen!
+        //     name: 'state12',
+        //     color: 'blue',
+        //     text: 'end',
+        //     nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
+        // },
         state12: {
-            //Zelf een dillema toevoegen!
-            name: 'state12',
-            color: 'blue',
-            text: 'end',
-            nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
-        },
-        state13: {
             //Einde, bedankt
-            name: 'state13',
+            name: 'state12',
             color: 'blue',
             text: 'end',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
@@ -152,7 +198,6 @@ const stateTransition = (currentStateName, nextStateName) => {
     if (nextState.nextAction === 'timer' && nextState.timerDuration) {
         setTimeout(() => {
             const nextStateAfterTimer = getNextStateName(nextStateName);
-            console.log('Timer elapsed, transitioning to:', nextStateAfterTimer);
             stateTransition(nextStateName, nextStateAfterTimer);
         }, nextState.timerDuration);
     }
@@ -161,7 +206,6 @@ const stateTransition = (currentStateName, nextStateName) => {
     clearTimeout(stateTimeout);  // Clear any existing timeout
     if (nextStateName !== 'state1') { 
         stateTimeout = setTimeout(() => {
-            console.log('90s timeout elapsed, transitioning to: state0');
             stateTransition(state.currentState, 'state0');  // Transition to state0 after 90 seconds
         }, 90000);  // Set new timeout for 90 seconds
     }
@@ -184,10 +228,11 @@ function getNextStateName(currentStateName) {
 }
 
 function startTimerTouch() {
-    console.log('Starting 15-second timer for sensor touch check');
     touchCheckTimeout = setTimeout(() => {
         // After 15 seconds, decide the next state based on sensors touched
         checkSensorsAfterTime();
+        // Call the function once to set the initial dilemmas
+        pickNewDilemmas();  
     }, 15000);  // 15 seconds
 }
 
@@ -205,10 +250,8 @@ function checkSensorsAfterTime() {
 
     // Decide the next state based on the number of sensors touched
     if (touchedSensorsCount <= 1) {
-        console.log('Transitioning back to state1 due to insufficient touches');
         stateTransition(state.currentState, 'state1');
     } else {
-        console.log('Enough sensors touched. Transitioning to the next state.');
         stateTransition(state.currentState, getNextStateName(state.currentState));
     }
 
@@ -220,11 +263,9 @@ function checkSensorsAfterTime() {
 io.on('connection', (socket) => {
     // Send the initial state
     socket.emit('stateUpdate', state.states[state.currentState]);
-    console.log('Start: Server emitted stateUpdate:', state.states[state.currentState]);
 
     // Listen for a button press and move to the next state if applicable
     socket.on('buttonPress', () => {
-        console.log('buttonPress: Server emitted stateUpdate to:', getNextStateName(state.currentState));
         stateTransition(state.currentState, getNextStateName(state.currentState));
     });
 
@@ -234,7 +275,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + 'public/index.html');
 });
 
 server.listen(3000, () => {

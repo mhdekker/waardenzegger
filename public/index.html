@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Waardenzegger 2.0</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <script type="text/javascript" src="/node_modules/circletype/dist/circletype.min.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
+
+    <div class="container">
+
+        <div class="circle">
+
+            <!-- State 0 -->
+            <div id="state0" class="state">
+                <h1>Ben je er nog?</h1>
+                <button onclick="nextButtonPressed()">Ja</button>
+            </div>
+
+            <!-- State 1 -->
+            <div id="state1" class="state">
+                <h1 class="isCentered curved-text">Welkom bij de Waardenzegger. Laat je waarden spreken in Digitale Dilemma’s. Speel met 2 tot 4 vrienden!</h1>
+                <button id="startButton" class="isCentered isPulsing" onclick="nextButtonPressed()"><img src="assets/images/start.png" width="100%" height="100%"></button>
+            </div>
+
+            <!-- State 2 -->
+            <div id="state2" class="state">
+                <h1 class="isCentered" >Leg jullie hand op de paarse hand voor je. De Waardenzegging gaat nu beginnen!</h1>
+                <img class="isCentered isPulsing" src="assets/images/hand.png">
+                <button onclick="nextButtonPressed()">Ja</button>
+            </div>
+
+            <!-- State 3 -->
+            <div id="state3" class="state">
+                <h1 class="isCentered">* pijltje draait rond *</h1>
+            </div>
+
+            <!-- State 4 -->
+            <div id="state4" class="state active">
+                <h1 class="isCentered">Kies één van de twee dilemma’s</h1>
+                <div id="dillemaKeuze" class="isCentered">
+                    <div id="dillemaKeuze1 isVCentered"> 
+                        <div><p></p></div>
+                        <button onclick="dillemaChosen()"><img src="assets/dilemma's/1.png"></button>
+                    </div>
+                    <div id="dillemaWoord isVCentered"> 
+                        <h6>Of</h6>
+                    </div>
+                    <div id="dillemaKeuze2 isVCentered"> 
+                        <div><p></p></div>
+                        <button onclick="dillemaChosen()"><img src="assets/dilemma's/1.png"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State 5 -->
+            <div id="state5" class="state">
+                <h1 class="isCentered">Vertel de anderen waarom je hiervoor kiest</h1>
+                <button onclick="nextButtonPressed()">Ga verder</button>
+            </div>
+
+            <!-- State 6 -->
+            <div id="state6" class="state">
+                <h1 class="isCentered">Draai nu aan de waardenschijf</h1>
+            </div>
+
+            <!-- State 7 -->
+            <div id="state7" class="state">
+                <h1 class="isCentered">Bekijk welke waarde voor jou ligt</h1>
+            </div>
+
+            <!-- State 8 -->
+            <div id="state8" class="state">
+                <h1 class="isCentered">Komt deze waarde positief of negatief naar voren in dit dilemma? Geef antwoord met een duimpje voor je</h1>
+                <button onclick="nextButtonPressed()">Duimpje omhoog</button>
+                <button onclick="nextButtonPressed()">Duimpje omlaag</button>
+            </div>
+
+            <!-- State 9 -->
+            <div id="state9" class="state">
+                <h1 class="isCentered">Leg jullie handen weer op de paarse hand</h1>
+            </div>
+
+            <!-- State 10 -->
+            <div id="state10" class="state">
+                <h1 class="isCentered">Stel je voor: jij vindt de waarde voor je super belangrijk. Hoe ga jij dan met dit dilemma om?</h1>
+                <button onclick="nextButtonPressed()">Verder</button>
+            </div>
+
+            <!-- State 11 -->
+            <div id="state11" class="state">
+                <h1 class="isCentered">Wie zijn er allemaal bij dit dilemma betrokken?. Vertel de anderen kort waarom</h1>
+                <button onclick="nextButtonPressed()">Verder</button>
+            </div>
+
+            <!-- State 12
+            <div id="state12" class="state">
+                <h1>Tijd om de Waardenzegger te voeden</h1>
+                <h1>Welk digitaal dilemma hebben jullie zelf weleens meegemaakt?</h1>
+                <form>
+                    <input type="text" id="fname" name="fname" placeholder="Typ hier het dillema kort in"><br><br>
+                </form>
+                <button onclick="nextButtonPressed()">Verder</button>
+            </div>
+            -->
+
+            <!-- State 13 -->
+            <div id="state12" class="state">
+                <h1 class="isCentered">Bedankt! #dewaardenzegger</h1>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+        const socket = io();
+        let dillema1 = 1;
+        let dillema2 = 1;
+
+        var beginState= {
+            name: 'state1'
+        };
+
+        socket.on('dillemas', (dillemas) => {
+            // Update the UI based on newState
+            dillema1 = dillemas[0];
+            dillema2 = dillemas[1];
+            
+            $('#dillemaKeuze img').eq(0).attr('src', "assets/dilemma's/" + dillema1 + ".png");
+            $('#dillemaKeuze img').eq(1).attr('src', "assets/dilemma's/" + dillema2 + ".png");
+            $('#dillemaKeuze p').eq(0).text(dillemaText1);
+            $('#dillemaKeuze p').eq(1).text(dillemaText2);
+        });
+
+
+        socket.on('test', (test) => {
+            // Update the UI based on newState
+            console.log("test: " + test);
+        });
+
+        socket.on('stateUpdate', (newState) => {
+
+            $('.state.active').fadeOut('5000', function() {
+                //Update the UI based on the new stat
+                updateUI(newState);
+
+                //Log the current state
+                console.log(`Moved to state: ${newState.name}`);
+
+                // Fade in the new state
+                
+            });
+        });
+
+        // Function to update UI
+        function updateUI(state) {
+            // Hide all states
+            document.querySelectorAll("h1").forEach(el => el.classList.remove('curved-text'));
+            document.querySelectorAll('.state').forEach(el => el.classList.remove('active'));
+            
+            // Show the current state
+            document.getElementById(state.name).classList.add('active');
+            $("#" + state.name).find("h1").addClass('curved-text');
+
+            var $curvedText = $(".curved-text");
+            updateCurvedText($curvedText,600);
+
+            console.log("Dillemas received: " + dillema1 + dillema2);
+
+            $('.state.active').fadeIn('5000');
+        }
+
+        function nextButtonPressed() {
+            socket.emit('buttonPress');
+        }
+
+        function dillemaChosen() {
+            socket.emit('buttonPress');
+        }
+
+        function updateCurvedText($curvedText, radius) {
+            var w = $curvedText.width(),
+                h = $curvedText.height();
+            var text = $curvedText.text();
+            var html = "";
+            Array.from(text).forEach(function (letter) {
+                html += `<span>${letter}</span>`;
+            });
+            $curvedText.html(html);
+            var $letters = $curvedText.find("span");
+            $letters.css({
+                position: "absolute",
+                height:`${radius}px`,
+                //backgroundColor:"orange",
+                transformOrigin:"bottom center"
+            });
+            
+            var circleLength = 2 * Math.PI * radius;
+            var angleRad = w/(2*radius);
+            if (angleRad == 0) {
+                angleRad = 2.8;
+            };
+            var angle = 2 * angleRad * 180/Math.PI/text.length;
+            
+            $letters.each(function(idx,el){
+                $(el).css({
+                    transform:`translate(0px,${-radius}px) rotate(${idx * angle - text.length*angle/2}deg)`
+                })
+            });   
+        }
+
+        </script>
+</body>
+</html>

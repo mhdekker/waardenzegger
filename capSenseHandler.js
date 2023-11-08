@@ -12,6 +12,7 @@ class CapSenseHandler extends EventEmitter {
 
     pythonProcess.stdout.on('data', (data) => {
       const touchedInput = data.toString('utf8').trim();
+      //console.log(`Pin touched: ` + touchedInput);
       this.activateSensor(touchedInput);
     });
 
