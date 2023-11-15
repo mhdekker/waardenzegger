@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const CapSenseHandler = require('./capSenseHandler');
+const LedStripController = require('./LedStripController');
 const path = require('path');
 const fs = require('fs');
 const { randomInt } = require('crypto');
@@ -10,6 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 const capSenseHandler = new CapSenseHandler();
+const ledController = new LedStripController('ledStripHandler.py');
 
 let stateTimeout; 
 
@@ -23,6 +25,8 @@ let chosenDillema;
 
 app.use(express.static('public'));
 
+ledController.chooseParticipant(5);
+
 // Optional: Explicitly set up route for node_modules if you need to serve files directly from it
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
@@ -33,36 +37,27 @@ function formatTextWithNumbersFromFile(filePath) {
     return text.replace(/(\d+)\.\s+/g, '$1. ');
   }
   
-// Example usage:
-const filePath = "public/assets/dillema's/dillemas.txt"; // Replace with your text file's path
-const formattedText = formatTextWithNumbersFromFile(filePath);
-console.log(formattedText);
+// const filePath = "public/assets/dillemas/dillemas.txt"; // Replace with your text file's path
+// const formattedText = formatTextWithNumbersFromFile(filePath);
+// console.log(formattedText);
 
-function pickNewDilemmas() {
-    dillemaOption1 = randomInt(1, 24); // randomInt is inclusive of the min and exclusive of the max
-    do {
-        dillemaOption2 = randomInt(1, 24);
-    } while (dillemaOption1 === dillemaOption2);
+// function pickNewDilemmas() {
+//     dillemaOption1 = randomInt(1, 24); // randomInt is inclusive of the min and exclusive of the max
+//     do {
+//         dillemaOption2 = randomInt(1, 24);
+//     } while (dillemaOption1 === dillemaOption2);
     
-    var dillemas = [dillemaOption1, dillemaOption2];
+//     var dillemas = [dillemaOption1, dillemaOption2];
 
-    io.emit('dillemas', dillemas);
-    console.log("Dillema's set! " + dillemas);
-}
+//     io.emit('dillemas', dillemas);
+//     console.log("Dillema's set! " + dillemas);
+// }
 
 // Call the function once to set the initial dilemmas
-pickNewDilemmas();
-
-function test() {
-    var test = "hello world";
-    io.emit('test', test);
-    console.log("test " + test);
-}
-
-test();
+//pickNewDilemmas();
 
 let state = {
-    currentState: 'state4',
+    currentState: 'state1',
     states: {
         state0: {
             //Time out

@@ -1,5 +1,6 @@
 import time
 from rpi_ws281x import PixelStrip, Color
+import sys
 
 # LED strip configuration:
 LED_COUNT = 128          # Number of LED lights on the strip
@@ -14,10 +15,8 @@ FADE_STEPS = 10          # Number of steps for fading
 # Define colors:
 PURPLE = Color(128, 0, 128)
 
-print("[DEBUG] Initializing LED strip...")  # Debug comment
 strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
 strip.begin()
-print("[DEBUG] LED strip initialization completed.")  # Debug comment
 
 # Map the logical ring numbers to the actual LED indices (you need to define the order here)
 ring_mapping = {
@@ -50,22 +49,22 @@ def turn_off_all_leds(strip):
         strip.setPixelColor(i, Color(0, 0, 0))
     strip.show()
 
-# Function to turn on rings in sequence based on the mapping and then turn off, continuously
-def turn_on_and_off_rings_continuous(strip):
-    while True:
-        for ring_number in sorted(ring_mapping.keys()):
-            set_ring(strip, ring_number, PURPLE)  # Turn on the ring with purple color
-            time.sleep(0.1)  # Time the ring stays on
-            set_ring(strip, ring_number, Color(0, 0, 0))  # Turn off the ring
-            time.sleep(0.1)  # Time the ring stays off
+# # Function to turn on rings in sequence based on the mapping and then turn off, continuously
+# def turn_on_and_off_rings_continuous(strip):
+#     while True:
+#         for ring_number in sorted(ring_mapping.keys()):
+#             set_ring(strip, ring_number, PURPLE)  # Turn on the ring with purple color
+#             time.sleep(0.1)  # Time the ring stays on
+#             set_ring(strip, ring_number, Color(0, 0, 0))  # Turn off the ring
+#             time.sleep(0.1)  # Time the ring stays off
 
-def select_participant(strip, number_of_final_led, duration=5):
+def choose_participant(strip, number_of_final_led):
     # Ensure the provided LED number is within the valid range
     if number_of_final_led < 0 or number_of_final_led >= len(ring_mapping):
         raise ValueError("Invalid LED number. Must be within the range of available rings.")
 
     # Calculate the end time based on the current time and duration
-    end_time = time.time() + duration
+    end_time = time.time() + 5
     current_ring = 0  # Start with the first ring
 
     # Keep running until we reach the final LED after the duration has passed
@@ -88,10 +87,23 @@ def select_participant(strip, number_of_final_led, duration=5):
     # When the loop breaks, leave the final ring on
     set_ring(strip, number_of_final_led, PURPLE)
 
-try:
-    # Here, replace 5 with the index of the ring you want to select
-    turn_off_all_leds(strip)
+if __name__ == "__main__":
+    command = sys.argv[1]
 
-except KeyboardInterrupt:
-    print("[DEBUG] Detected KeyboardInterrupt. Turning off all LEDs...")  # Debug comment
-    turn_off_all_leds(strip)
+    if command == 'set_ring':
+        ring_number = int(sys.argv[2])
+        color_name = sys.argv[3]
+        # Add a mechanism to convert color_name to an actual Color
+        color = Color(128, 0, 128)  # Example: Purple, you can extend this
+        set_ring(strip, ring_number, color)
+
+    elif command == 'turn_off_all_leds':
+        turn_off_all_leds(strip)
+
+    elif command == 'choose_participant':
+        participant_number = int(sys.argv[2])
+        choose_participant(strip, participant_number)
+
+# except KeyboardInterrupt:
+#     print("[DEBUG] Detected KeyboardInterrupt. Turning off all LEDs...")  # Debug comment
+#     turn_off_all_leds(strip)
