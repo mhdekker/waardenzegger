@@ -28,4 +28,5 @@ while True:
 #         if mpr121[i]:
 #             print(i)
 #             sys.stdout.flush()
-#     time.sleep(0.25)  # mimic the original delay
+#     time.sleep(0.25)  # mimic the original delay1234
+

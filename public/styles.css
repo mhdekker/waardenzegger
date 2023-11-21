@@ -13,6 +13,7 @@ body {
   height: 100vh;
   margin: 0;
   text-align: center;
+  overflow: hidden; /* Hide scrollbars */
 }
 
 .state {
@@ -53,6 +54,12 @@ h6 {
   display: inline-block;
   color: white;
   font-size: 40px;
+}
+
+p {
+  color: white;
+  display: inline-block;
+  font-size: 20px;
 }
 
 button {
@@ -145,4 +152,26 @@ button {
   display: flex;
   justify-content: center; /* Align horizontal */
   align-items: center; /* Align vertical */
+}
+
+.temperaryCenteredButtonContainer {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  height: 100vh; /* Set the height of the container as needed */
+  /* Additional styles for container */
+  z-index:100;
+
+}
+
+.temperaryCenteredButton {
+    /* Button styling (optional) */
+    padding: 50px 100px;
+    border: none;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 40px;
+    z-index:100;
 }

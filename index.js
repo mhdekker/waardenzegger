@@ -25,36 +25,37 @@ let chosenDillema;
 
 app.use(express.static('public'));
 
-ledController.chooseParticipant(5);
+ledController.turnOffAllLeds();
 
 // Optional: Explicitly set up route for node_modules if you need to serve files directly from it
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
-function formatTextWithNumbersFromFile(filePath) {
+function formatTextToArray(filePath) {
     // Read the file content
     const text = fs.readFileSync(filePath, 'utf8');
-    // Format the text
-    return text.replace(/(\d+)\.\s+/g, '$1. ');
-  }
-  
-// const filePath = "public/assets/dillemas/dillemas.txt"; // Replace with your text file's path
-// const formattedText = formatTextWithNumbersFromFile(filePath);
-// console.log(formattedText);
 
-// function pickNewDilemmas() {
-//     dillemaOption1 = randomInt(1, 24); // randomInt is inclusive of the min and exclusive of the max
-//     do {
-//         dillemaOption2 = randomInt(1, 24);
-//     } while (dillemaOption1 === dillemaOption2);
+    // Split the text into an array of lines, then map each line to remove the numbers
+    return text.split('\n').map(line => line.replace(/^\d+\.\s*/, '').trim());
+}
+
+const sentencesArray = formatTextToArray('public/assets/dilemmas/dillemas.txt');
+console.log(sentencesArray); // This will output the array of sentences
+
+function pickNewDilemmas() {
+    dillemaOption1 = randomInt(1, 24); // randomInt is inclusive of the min and exclusive of the max
+    do {
+        dillemaOption2 = randomInt(1, 24);
+    } while (dillemaOption1 === dillemaOption2);
     
-//     var dillemas = [dillemaOption1, dillemaOption2];
+    var dillemas = [dillemaOption1, dillemaOption2];
 
-//     io.emit('dillemas', dillemas);
-//     console.log("Dillema's set! " + dillemas);
-// }
+    io.emit('dillemas', dillemas);
+    io.emit('dillemasText', sentencesArray);
+    console.log("Dillema's set! " + dillemas);
+}
 
 // Call the function once to set the initial dilemmas
-//pickNewDilemmas();
+pickNewDilemmas();
 
 let state = {
     currentState: 'state1',
@@ -87,6 +88,7 @@ let state = {
             //De waardenzegger kiest 1 deelnemer uit om een dilemma te kiezen 
             name: 'state3',
             color: 'blue',
+            ledAction: '1',
             text: 'Ik kies nu iemand uit...',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
             timerDuration: 5000        // 5 seconds
@@ -132,6 +134,7 @@ let state = {
             //Er wordt opnieuw een participant gekozen
             name: 'state9',
             color: 'blue',
+            ledAction: '5',
             text: 'Ik kies nu weer iemand uit...',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
             timerDuration: 5000        // 5 seconds
@@ -181,6 +184,14 @@ const stateTransition = (currentStateName, nextStateName) => {
     //check for timerTouch
     if (nextState.nextAction === 'timerTouch') {
         startTimerTouch();
+    }
+
+    if (nextState.ledAction === '1') {
+        ledController.chooseParticipant(1);
+    }
+
+    if (nextState.ledAction === '5') {
+        ledController.chooseParticipant(5);
     }
 
     // Immediately update the current state and inform all clients

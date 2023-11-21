@@ -46,15 +46,15 @@
                 <h1 class="isCentered">Kies één van de twee dilemma’s</h1>
                 <div id="dillemaKeuze" class="isCentered">
                     <div id="dillemaKeuze1 isVCentered"> 
-                        <div><p></p></div>
-                        <button onclick="dillemaChosen()"><img src="assets/dilemma's/1.png"></button>
+                        <div><p>test</p></div>
+                        <button onclick="dillemaChosen()"><img src="assets/dilemmas/1.png"></button>
                     </div>
                     <div id="dillemaWoord isVCentered"> 
                         <h6>Of</h6>
                     </div>
                     <div id="dillemaKeuze2 isVCentered"> 
-                        <div><p></p></div>
-                        <button onclick="dillemaChosen()"><img src="assets/dilemma's/1.png"></button>
+                        <div><p>test</p></div>
+                        <button onclick="dillemaChosen()"><img src="assets/dilemmas/1.png"></button>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,9 @@
             <!-- State 5 -->
             <div id="state5" class="state">
                 <h1 class="isCentered">Vertel de anderen waarom je hiervoor kiest</h1>
-                <button onclick="nextButtonPressed()">Ga verder</button>
+                <div class="temperaryCenteredButtonContainer">
+                    <button onclick="nextButtonPressed()" class="temperaryCenteredButton">Ga verder</button>
+                </div>
             </div>
 
             <!-- State 6 -->
@@ -90,13 +92,17 @@
             <!-- State 10 -->
             <div id="state10" class="state">
                 <h1 class="isCentered">Stel je voor: jij vindt de waarde voor je super belangrijk. Hoe ga jij dan met dit dilemma om?</h1>
-                <button onclick="nextButtonPressed()">Verder</button>
+                <div class="temperaryCenteredButtonContainer">
+                    <button onclick="nextButtonPressed()" class="temperaryCenteredButton">Verder</button>
+                </div>
             </div>
 
             <!-- State 11 -->
             <div id="state11" class="state">
                 <h1 class="isCentered">Wie zijn er allemaal bij dit dilemma betrokken?. Vertel de anderen kort waarom</h1>
-                <button onclick="nextButtonPressed()">Verder</button>
+                <div class="temperaryCenteredButtonContainer">
+                    <button onclick="nextButtonPressed()" class="temperaryCenteredButton">Verder</button>
+                </div>
             </div>
 
             <!-- State 12
@@ -125,6 +131,7 @@
         const socket = io();
         let dillema1 = 1;
         let dillema2 = 1;
+        let dillemasText = [];
 
         var beginState= {
             name: 'state1'
@@ -135,12 +142,20 @@
             dillema1 = dillemas[0];
             dillema2 = dillemas[1];
             
-            $('#dillemaKeuze img').eq(0).attr('src', "assets/dilemma's/" + dillema1 + ".png");
-            $('#dillemaKeuze img').eq(1).attr('src', "assets/dilemma's/" + dillema2 + ".png");
-            $('#dillemaKeuze p').eq(0).text(dillemaText1);
-            $('#dillemaKeuze p').eq(1).text(dillemaText2);
+            $('#dillemaKeuze img').eq(0).attr('src', "/assets/dilemmas/" + dillema1 + ".png");
+            $('#dillemaKeuze img').eq(1).attr('src', "/assets/dilemmas/" + dillema2 + ".png");
+            console.log("img1 " + dillema1);
+            console.log("img2 " + dillema2);
         });
 
+        socket.on('dillemasText', (_dillemasText) => {
+            dillemasText = _dillemasText;
+
+            $('#dillemaKeuze p').eq(0).text(dillemasText[dillema1-1]);
+            $('#dillemaKeuze p').eq(1).text(dillemasText[dillema2-1]);
+            console.log("text1 " + dillema1-1);
+            console.log("text2 " + dillema2-1);
+        })
 
         socket.on('test', (test) => {
             // Update the UI based on newState
@@ -172,7 +187,7 @@
             $("#" + state.name).find("h1").addClass('curved-text');
 
             var $curvedText = $(".curved-text");
-            updateCurvedText($curvedText,600);
+            updateCurvedText($curvedText,500);
 
             console.log("Dillemas received: " + dillema1 + dillema2);
 
@@ -217,7 +232,6 @@
                 })
             });   
         }
-
         </script>
 </body>
 </html>
