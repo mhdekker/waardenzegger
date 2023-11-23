@@ -10,6 +10,7 @@
 
 body {
   font-family: "vt323";
+  letter-spacing: .3rem;
   height: 100vh;
   margin: 0;
   text-align: center;

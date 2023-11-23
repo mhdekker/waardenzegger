@@ -1,21 +1,17 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const CapSenseHandler = require('./capSenseHandler');
-const LedStripController = require('./LedStripController');
 const path = require('path');
 const fs = require('fs');
 const { randomInt } = require('crypto');
+const { spawn } = require('child_process');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-const capSenseHandler = new CapSenseHandler();
-const ledController = new LedStripController('ledStripHandler.py');
 
 let stateTimeout; 
 
-//capsense logic
 let activeSensors = {};
 let touchCheckTimeout = null;
 let chosenOne;
@@ -25,7 +21,21 @@ let chosenDillema;
 
 app.use(express.static('public'));
 
-ledController.turnOffAllLeds();
+function runPythonScript() {
+    const pythonProcess = spawn('sudo', ['python3', '/home/martijn/waardenzegger/handler.py']);
+
+    pythonProcess.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`);
+    });
+
+    pythonProcess.on('close', (code) => {
+        console.log(`Python script exited with code ${code}`);
+    });
+}
 
 // Optional: Explicitly set up route for node_modules if you need to serve files directly from it
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
@@ -81,7 +91,7 @@ let state = {
             color: 'blue',
             text: 'Leg je hand op de paarse hand voor je',
             nextAction: 'timerTouch',  // A simulated sensor input triggers the next state
-            timerDuration: 1500
+            timerDuration: 8000
             //nextAction: 'buttonPress'  // Defines what should trigger the next state
         },
         state3: {
@@ -238,7 +248,6 @@ function startTimerTouch() {
         // After 15 seconds, decide the next state based on sensors touched
         checkSensorsAfterTime();
         // Call the function once to set the initial dilemmas
-        pickNewDilemmas();  
     }, 15000);  // 15 seconds
 }
 
@@ -275,8 +284,15 @@ io.on('connection', (socket) => {
         stateTransition(state.currentState, getNextStateName(state.currentState));
     });
 
-    capSenseHandler.on('sensorActivated', (sensorId) => {
-        activeSensors[sensorId] = true;  // Mark the sensor as touched
+    socket.on('touch_event', (data) => {
+        // Now you can use data.sensor_id and data.state
+        if (data.state === 'touched') {
+            console.log(`Sensor ${data.sensor_id} was touched`);
+            // Add your logic here
+        } else if (data.state === 'untouched') {
+            console.log(`Sensor ${data.sensor_id} was untouched`);
+            // Add logic to handle the sensor being untouched
+        }
     });
 });
 
@@ -286,5 +302,6 @@ app.get('/', (req, res) => {
 
 server.listen(3000, () => {
     console.log('Server is listening on port 3000');
+    runPythonScript();  // This will start the Python script
 });
 
