@@ -31,7 +31,7 @@
 
             <!-- State 2 -->
             <div id="state2" class="state">
-                <h1 class="isCentered" >Leg jullie hand op de paarse hand voor je. De Waardenzegging gaat nu beginnen!</h1>
+                <h1 class="isCentered" >Leg jullie hand op de hand voor je. De Waardenzegging gaat nu beginnen!</h1>
                 <img class="isCentered isPulsing" src="assets/images/hand.png">
                 <button onclick="nextButtonPressed()">Ja</button>
             </div>
@@ -43,27 +43,29 @@
 
             <!-- State 4 -->
             <div id="state4" class="state active">
-                <h1 class="isCentered">Kies één van de twee dilemma’s</h1>
-                <div id="dillemaKeuze" class="isCentered">
-                    <div id="dillemaKeuze1 isVCentered"> 
-                        <div><p>test</p></div>
-                        <button onclick="dillemaChosen()"><img src="assets/dilemmas/1.png"></button>
+                <div class="dillemaKeuze isCentered">
+                    <div class="rechteTitel">
+                        <h2>Kies één stelling uit het dilemma</h2>
                     </div>
-                    <div id="dillemaWoord isVCentered"> 
-                        <h6>Of</h6>
+                    <div class="stellingTitel stellingTitel1"><p>Ik moet bij elk evenement zeggen dat ik niet op de foto wil, terwijl de rest dat wel wil.</p></div>
+                    <button class="dillemaKeuze1" onclick="dillemaChosen()"><img class="stellingImage" src="assets/dilemmas/1.png"></button>
+                    <div class="dillemaWoord"> 
+                        <h6>OF</h6>
                     </div>
-                    <div id="dillemaKeuze2 isVCentered"> 
-                        <div><p>test</p></div>
-                        <button onclick="dillemaChosen()"><img src="assets/dilemmas/1.png"></button>
-                    </div>
+                    <div class="stellingTitel stellingTitel2"><p>Ik moet vrienden voor zwak uitmaken als ze negatieve opmerkingen op hun post verwijderen.</p></div>
+                    <button class="dillemaKeuze2" onclick="dillemaChosen()"><img class="stellingImage" src="assets/dilemmas/1.png"></button>
                 </div>
             </div>
 
             <!-- State 5 -->
             <div id="state5" class="state">
                 <h1 class="isCentered">Vertel de anderen waarom je hiervoor kiest</h1>
-                <div class="temperaryCenteredButtonContainer">
-                    <button onclick="nextButtonPressed()" class="temperaryCenteredButton">Ga verder</button>
+                <div class="dillemaKeuze-5 isCentered">
+                    <div class="stellingTitel-5"><p>Ik moet bij elk evenement zeggen dat ik niet op de foto wil, terwijl de rest dat wel wil.</p></div>
+                    <button class="dillemaKeuze1-5" onclick="dillemaChosen()"><img class="stellingImage-5" src="assets/dilemmas/1.png"></button>
+                </div>
+                <div class="bottomButtonContainer isCentered">
+                    <button onclick="nextButtonPressed()" class="bottomButton"><p class="bottomButtonText">Verder</p></button>
                 </div>
             </div>
 
@@ -134,7 +136,7 @@
         let dillemasText = [];
 
         var beginState= {
-            name: 'state1'
+            name: 'state4'
         };
 
         socket.on('dillemas', (dillemas) => {

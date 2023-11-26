@@ -68,7 +68,7 @@ function pickNewDilemmas() {
 pickNewDilemmas();
 
 let state = {
-    currentState: 'state1',
+    currentState: 'state4',
     states: {
         state0: {
             //Time out
@@ -223,7 +223,7 @@ const stateTransition = (currentStateName, nextStateName) => {
     if (nextStateName !== 'state1') { 
         stateTimeout = setTimeout(() => {
             stateTransition(state.currentState, 'state0');  // Transition to state0 after 90 seconds
-        }, 90000);  // Set new timeout for 90 seconds
+        }, 9000000);  // Set new timeout for 90 seconds
     }
 };
 
@@ -283,6 +283,8 @@ io.on('connection', (socket) => {
     socket.on('buttonPress', () => {
         stateTransition(state.currentState, getNextStateName(state.currentState));
     });
+
+    socket.emit('choose_participant', { message: 'Trigger Python function' });
 
     socket.on('touch_event', (data) => {
         // Now you can use data.sensor_id and data.state
