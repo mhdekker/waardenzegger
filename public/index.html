@@ -19,47 +19,114 @@
 
             <!-- State 0 -->
             <div id="state0" class="state">
-                <h1>Ben je er nog?</h1>
-                <button onclick="nextButtonPressed()">Ja</button>
+                <h1 class="isCentered">Ben je er nog?</h1>
+                <div class="bottomButtonContainer isCentered bottomToCenter">
+                    <button class="bottomButton" onclick="nextButtonPressed()"><p class="bottomButtonText">Ja</p></button>
+                </div>
             </div>
 
             <!-- State 1 -->
-            <div id="state1" class="state">
+            <div id="state1" class="state active">
                 <h1 class="isCentered curved-text">Welkom bij de Waardenzegger. Laat je waarden spreken in Digitale Dilemma’s.</h1>
-                <button id="startButton" class="isCentered isPulsing" onclick="nextButtonPressed()"><img src="assets/images/start.png" width="100%" height="100%"></button>
+                <button id="startButton" class="isCentered isPulsingAndRotating" onclick="nextButtonPressed()"><img src="assets/images/start.png" width="200px" height="200px"></button>
             </div>
 
             <!-- State 2 -->
             <div id="state2" class="state">
                 <h1 class="isCentered" >Leg jullie hand op de hand voor je. De Waardenzegging gaat nu beginnen!</h1>
-                <img class="isCentered isPulsing" src="assets/images/hand.png">
-                <button onclick="nextButtonPressed()">Ja</button>
+                <img class="isCentered isPulsingAndRotating" src="assets/images/hand.png">
             </div>
 
             <!-- State 3 -->
             <div id="state3" class="state">
-                <h1 class="isCentered">* pijltje draait rond *</h1>
+                <img class="theEye isCentered" src="assets/images/oog.png"/>
             </div>
 
             <!-- State 4 -->
-            <div id="state4" class="state active">
+            <div id="state4" class="state">
                 <div class="dillemaKeuze isCentered">
                     <div class="rechteTitel">
                         <h2>Kies één stelling uit het dilemma</h2>
                     </div>
-                    <div class="stellingTitel stellingTitel1"><p>Ik moet bij elk evenement zeggen dat ik niet op de foto wil, terwijl de rest dat wel wil.</p></div>
-                    <button class="dillemaKeuze1" onclick="dillemaChosen()"><img class="stellingImage" src="assets/dilemmas/1.png"></button>
+                    <div class="stellingTitel stellingTitel1"><p>Titel</p></div>
+                    <button class="dillemaKeuze1" onclick="dillemaChosen(0)"><img class="stellingImage" src="assets/dilemmas/1.png"></button>
                     <div class="dillemaWoord"> 
                         <h6>OF</h6>
                     </div>
-                    <div class="stellingTitel stellingTitel2"><p>Ik moet vrienden voor zwak uitmaken als ze negatieve opmerkingen op hun post verwijderen.</p></div>
-                    <button class="dillemaKeuze2" onclick="dillemaChosen()"><img class="stellingImage" src="assets/dilemmas/1.png"></button>
+                    <div class="stellingTitel stellingTitel2"><p>Titel</p></div>
+                    <button class="dillemaKeuze2" onclick="dillemaChosen(1)"><img class="stellingImage" src="assets/dilemmas/1.png"></button>
                 </div>
             </div>
 
             <!-- State 5 -->
             <div id="state5" class="state">
                 <h1 class="isCentered">Vertel de anderen waarom je hiervoor kiest</h1>
+                <div class="dillemaKeuze-5 isCentered">
+                    <div class="stellingTitel-5"><p>Titel</p></div>
+                    <div class="dillemaKeuze1-5"><img class="stellingImage-5" src="assets/dilemmas/1.png"></div>
+                </div>
+                <div class="bottomButtonContainer isCentered">
+                    <button onclick="nextButtonPressed()" class="bottomButton"><p class="bottomButtonText">Verder</p></button>
+                </div>
+            </div>
+
+            <!-- State 6 -->
+            <div id="state6" class="state">
+                <h1 class="isCentered"> Zien jullie de schijf met al die waarden? Geef hier een flinke zwieper aan.</h1>
+                <img class="waardenschijf isCentered" src="assets/images/waardenschijf.png">
+            </div>
+
+            <!-- State 7 -->
+            <div id="state7" class="state">
+                <h1 class="isCentered">Wacht tot de waardenschijf gestopt is met draaien. Bekijk welke waarde voor jou ligt.</h1>
+                <img class="waardenschijf2 isCentered" src="assets/images/waardenschijf.png">
+            </div>
+
+            <!-- State 8 -->
+            <div id="state8" class="state">
+                <h1 class="isCentered">Is de waarde voor jou positief, negatief of zit het er niet in bij de gekozen stelling?</h1>
+                <div class="dillemaKeuze-5 centerOffsetAndRotation">
+                    <div class="stellingTitel-5"><p>Titel</p></div>
+                    <div class="dillemaKeuze1-5"><img class="stellingImage-5" src="assets/dilemmas/1.png"></div>
+                </div>
+                <div class="thumbsButtonsContainer thumbsButton0">
+                    <button class="thumbsButtonUp" onclick="nextButtonPressed()"><img src="assets/images/down.png" /></button>
+                    <button class="thumbsButtonDown" onclick="nextButtonPressed()"><img src="assets/images/up.png" /></button>
+                </div>
+                <div class="thumbsButtonsContainer thumbsButton1">
+                    <button class="thumbsButtonUp" onclick="nextButtonPressed()"><img src="assets/images/down.png" /></button>
+                    <button class="thumbsButtonDown" onclick="nextButtonPressed()"><img src="assets/images/up.png" /></button>
+                </div>
+                <div class="thumbsButtonsContainer thumbsButton2">
+                    <button class="thumbsButtonUp" onclick="nextButtonPressed()"><img src="assets/images/down.png" /></button>
+                    <button class="thumbsButtonDown" onclick="nextButtonPressed()"><img src="assets/images/up.png" /></button>
+                </div>
+                <div class="thumbsButtonsContainer thumbsButton3">
+                    <button class="thumbsButtonUp" onclick="nextButtonPressed()"><img src="assets/images/down.png" /></button>
+                    <button class="thumbsButtonDown" onclick="nextButtonPressed()"><img src="assets/images/up.png" /></button>
+                </div>
+            </div>
+
+            <!-- State 9 -->
+            <div id="state9" class="state">
+                <h1 class="isCentered">Kies de stelling die het beste past bij de waarde voor je?</h1>
+                <img class="isCentered isPulsingAndRotating" src="assets/images/hand.png">
+            </div>
+
+            <!-- State 10 -->
+            <div id="state19" class="state">
+                <h1 class="isCentered" >Leg jullie handen weer op de handjes</h1>
+                <img class="isCentered isPulsingAndRotating" src="assets/images/hand.png">
+            </div>
+
+            <!-- State 11 -->
+            <div id="state11" class="state">
+                <img class="theEye isCentered" src="assets/images/oog.png"/>
+            </div>
+
+            <!-- State 12 -->
+            <div id="state12" class="state">
+                <h1 class="isCentered"> Vertel de anderen kort waarom</h1>
                 <div class="dillemaKeuze-5 isCentered">
                     <div class="stellingTitel-5"><p>Ik moet bij elk evenement zeggen dat ik niet op de foto wil, terwijl de rest dat wel wil.</p></div>
                     <button class="dillemaKeuze1-5" onclick="dillemaChosen()"><img class="stellingImage-5" src="assets/dilemmas/1.png"></button>
@@ -69,58 +136,21 @@
                 </div>
             </div>
 
-            <!-- State 6 -->
-            <div id="state6" class="state">
-                <h1 class="isCentered">Draai nu aan de waardenschijf</h1>
-            </div>
-
-            <!-- State 7 -->
-            <div id="state7" class="state">
-                <h1 class="isCentered">Bekijk welke waarde voor jou ligt</h1>
-            </div>
-
-            <!-- State 8 -->
-            <div id="state8" class="state">
-                <h1 class="isCentered">Komt deze waarde positief of negatief naar voren in dit dilemma? Geef antwoord met een duimpje voor je</h1>
-                <button onclick="nextButtonPressed()">Duimpje omhoog</button>
-                <button onclick="nextButtonPressed()">Duimpje omlaag</button>
-            </div>
-
-            <!-- State 9 -->
-            <div id="state9" class="state">
-                <h1 class="isCentered">Leg jullie handen weer op de paarse hand</h1>
-            </div>
-
-            <!-- State 10 -->
-            <div id="state10" class="state">
-                <h1 class="isCentered">Stel je voor: jij vindt de waarde voor je super belangrijk. Hoe ga jij dan met dit dilemma om?</h1>
-                <div class="temperaryCenteredButtonContainer">
-                    <button onclick="nextButtonPressed()" class="temperaryCenteredButton">Verder</button>
-                </div>
-            </div>
-
-            <!-- State 11 -->
-            <div id="state11" class="state">
-                <h1 class="isCentered">Wie zijn er allemaal bij dit dilemma betrokken?. Vertel de anderen kort waarom</h1>
-                <div class="temperaryCenteredButtonContainer">
-                    <button onclick="nextButtonPressed()" class="temperaryCenteredButton">Verder</button>
-                </div>
-            </div>
-
-            <!-- State 12
-            <div id="state12" class="state">
-                <h1>Tijd om de Waardenzegger te voeden</h1>
-                <h1>Welk digitaal dilemma hebben jullie zelf weleens meegemaakt?</h1>
-                <form>
+            <!-- State 13 -->
+            <div id="state13" class="state">
+                <h1 class="isCentered">Tijd om de Waardenzegger te voeden. Welk digitaal dilemma hebben jullie zelf weleens meegemaakt?</h1>
+                <form class="isCentered">
                     <input type="text" id="fname" name="fname" placeholder="Typ hier het dillema kort in"><br><br>
                 </form>
-                <button onclick="nextButtonPressed()">Verder</button>
+                <div class="bottomButtonContainer isCentered">
+                    <button onclick="nextButtonPressed()" class="bottomButton"><p class="bottomButtonText">Verder</p></button>
+                </div>              
             </div>
-            -->
 
-            <!-- State 13 -->
-            <div id="state12" class="state">
-                <h1 class="isCentered">Bedankt! #dewaardenzegger</h1>
+            <!-- State 14 -->
+            <div id="state14" class="state">
+                <h1 class="isCentered">Bedankt! #De_Waardenzegger</h1>
+                <img class="isCentered isPulsing" src="assets/images/hand.png">
             </div>
 
         </div>
@@ -131,32 +161,60 @@
     <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script>
         const socket = io();
-        let dillema1 = 1;
-        let dillema2 = 1;
+        let chosenOne;
+        let dillemaNumber = [];
         let dillemasText = [];
 
         var beginState= {
-            name: 'state4'
+            name: 'state1'
         };
+
+        socket.on('chosenOne', (_chosenOne) => {
+            chosenOne = _chosenOne;
+            switch(_chosenOne) {
+                case 0:
+                    $( ".circle" ).css( "transform", "rotate(180deg)" );
+                    console.log("Rotation set to: 0");
+
+                    break;
+                case 1:
+                    $( ".circle" ).css( "transform", "rotate(90deg)" );
+                    console.log("Rotation set to: 1");
+
+                    break;
+                case 2:
+                    $( ".circle" ).css( "transform", "rotate(0deg)" );
+                    console.log("Rotation set to: 2");
+
+                    break;
+                case 3:
+                    $( ".circle" ).css( "transform", "rotate(270deg)" );
+                    console.log("Rotation set to: 3");
+
+                    break;
+                default: 
+                $( ".circle" ).css( "transform", "rotate(0)" );
+            }
+        });
 
         socket.on('dillemas', (dillemas) => {
             // Update the UI based on newState
-            dillema1 = dillemas[0];
-            dillema2 = dillemas[1];
+            dillemaNumber[0] = dillemas[0];
+            dillemaNumber[1] = dillemas[1];
             
-            $('#dillemaKeuze img').eq(0).attr('src', "/assets/dilemmas/" + dillema1 + ".png");
-            $('#dillemaKeuze img').eq(1).attr('src', "/assets/dilemmas/" + dillema2 + ".png");
-            console.log("img1 " + dillema1);
-            console.log("img2 " + dillema2);
+            $('.dillemaKeuze img').eq(0).attr('src', "/assets/dilemmas/" + dillemaNumber[0] + ".png");
+            $('.dillemaKeuze img').eq(1).attr('src', "/assets/dilemmas/" + dillemaNumber[1] + ".png");
+            console.log("img1 " + dillemaNumber[0]);
+            console.log("img2 " + dillemaNumber[1]);
         });
 
         socket.on('dillemasText', (_dillemasText) => {
             dillemasText = _dillemasText;
 
-            $('#dillemaKeuze p').eq(0).text(dillemasText[dillema1-1]);
-            $('#dillemaKeuze p').eq(1).text(dillemasText[dillema2-1]);
-            console.log("text1 " + dillema1-1);
-            console.log("text2 " + dillema2-1);
+            $('.dillemaKeuze p').eq(0).text(dillemasText[dillemaNumber[0]-1]);
+            $('.dillemaKeuze p').eq(1).text(dillemasText[dillemaNumber[1]-1]);
+            console.log("text1 " + dillemaNumber[0]-1);
+            console.log("text2 " + dillemaNumber[1]-1);
         })
 
         socket.on('test', (test) => {
@@ -172,9 +230,6 @@
 
                 //Log the current state
                 console.log(`Moved to state: ${newState.name}`);
-
-                // Fade in the new state
-                
             });
         });
 
@@ -191,16 +246,21 @@
             var $curvedText = $(".curved-text");
             updateCurvedText($curvedText,500);
 
-            console.log("Dillemas received: " + dillema1 + dillema2);
-
-            $('.state.active').fadeIn('5000');
+            $('.active').fadeIn('5000');
         }
 
         function nextButtonPressed() {
             socket.emit('buttonPress');
         }
 
-        function dillemaChosen() {
+        function dillemaChosen(number) {
+            $('.dillemaKeuze-5 img').each(function() {
+                $(this).attr('src', "/assets/dilemmas/" + dillemaNumber[number] + ".png");
+            });
+            $('.dillemaKeuze-5 p').each(function() {
+                $(this).text(dillemasText[dillemaNumber[number]-1]);
+            });
+
             socket.emit('buttonPress');
         }
 

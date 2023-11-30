@@ -26,12 +26,6 @@ body {
   background-position: left;
   background-repeat: no-repeat;
   background-size: cover;
-
-  /* animation: backgroundMove 5s infinite; */
-}
-
-@keyframes backgroundMove {
-  50% {background-position: center;}
 }
 
 .state {
@@ -53,7 +47,7 @@ body {
   height: 100%;
   position: relative;
   border-radius: 50%;
-  background: black;
+  transform: rotate(0);
 }
 
 h1 {
@@ -118,14 +112,6 @@ button {
   height: 275px;
 }
 
-@keyframes spin { 
-  from { 
-      transform: rotate(360deg); 
-  } to { 
-      transform: rotate(0deg); 
-  }
-}
-
 .curved-text{
   margin:0 auto;
   position: absolute;
@@ -139,21 +125,13 @@ button {
   margin:0;
 }
 
-@keyframes pulse {
-	0% {
-    translate: -50% -50%;
-		transform: scale(0.95);
-	}
-
-	70% {
-    translate: -50% -50%;
-		transform: scale(1);
-	}
-
-	100% {
-    translate: -50% -50%;
-		transform: scale(0.95);
-	}
+@keyframes spin {
+  0% {
+      transform: rotate(360deg);
+  }
+  100% {
+      transform: rotate(0);
+  }
 }
 
 .isPulsing {
@@ -163,10 +141,83 @@ button {
   animation-iteration-count: infinite;
 }
 
+@keyframes pulse {
+	0% {
+		scale: 1;
+	}
+
+	70% {
+		scale: 0.9;
+	}
+
+	100% {
+		scale: 1;
+	}
+}
+
+.isRotating {
+  animation: continuousRotate 20s linear infinite;
+}
+
+@keyframes continuousRotate {
+  0% {
+      transform: translate(-50%, -50%) rotate(360deg) scale(0.8);
+  }
+  100% {
+      transform: translate(-50%, -50%) rotate(0) scale(0.8);
+  }
+}
+
+.isPulsingAndRotating {
+  animation: pulseAndRotate 20s linear infinite;
+}
+
+@keyframes pulseAndRotate {
+  0% {
+      transform: translate(-50%, -50%) rotate(360deg) scale(0.90);
+  }
+  10% {
+      transform: translate(-50%, -50%) rotate(324deg) scale(1.1);
+  }
+  20% {
+    transform: translate(-50%, -50%) rotate(288deg) scale(0.90);
+  }
+  30% {
+    transform: translate(-50%, -50%) rotate(252deg) scale(1.1);
+  }
+  40% {
+    transform: translate(-50%, -50%) rotate(216deg) scale(0.90);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg) scale(1.1);
+  }
+  60% {
+    transform: translate(-50%, -50%) rotate(144deg) scale(0.90);
+  }
+  70% {
+    transform: translate(-50%, -50%) rotate(108deg) scale(1.1);
+  }
+  80% {
+    transform: translate(-50%, -50%) rotate(72deg) scale(0.90);
+  }
+  90% {
+    transform: translate(-50%, -50%) rotate(36deg) scale(1.1);
+  }
+  100% {
+      transform: translate(-50%, -50%) rotate(0) scale(0.90);
+  }
+}
+
 .dillemaKeuze {
   display: grid;
   grid-template-columns: 350px 100px 350px;
   grid-template-rows: 150px 150px 300px;
+}
+
+.dillemaKeuze2 {
+  display: grid;
+  grid-template-columns: 350px 100px 350px;
+  grid-template-rows: 0px 150px 300px;
 }
 
 .dillemaKeuze1 {
@@ -232,6 +283,10 @@ button {
   transform: translate(-50px, 280px);
 }
 
+.bottomToCenter {
+  transform: translate(-50px,-50px);
+}
+
 .bottomButton {
   width: 100%;
   height: 100%;
@@ -278,4 +333,102 @@ button {
 .stellingImage-5 {
   width: 100%;
   transform: translateY(-80px);
+}
+
+.waardenschijf {
+  animation-name: rotateImage;
+  animation-duration: 10s; /* Adjust as needed */
+  animation-timing-function: ease-in;
+}
+
+.waardenschijf2 {
+  animation-name: rotateImage;
+  animation-duration: 7s; /* Adjust as needed */
+  animation-timing-function: ease-out;
+}
+
+@keyframes rotateImage {
+  0% {
+    transform: translate(-50%, -50%) rotate(1000deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+}
+
+.isRotating {
+  animation: continuousRotate 20s linear infinite;
+}
+
+@keyframes continuousRotate {
+  from {
+      transform: translate(-50%, -50%) rotate(360deg) scale(0.8);
+  }
+  to {
+      transform: translate(-50%, -50%) rotate(0) scale(0.8);
+  }
+}
+
+.theEye {
+  transform: rotate(90deg);
+}
+
+.thumbsButtonContainer {
+}
+
+.thumbsButton0 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.thumbsButton1 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.thumbsButton2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.thumbsButton3 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.thumbsButtonUp {
+  transform: translate(0, -300px);
+}
+
+.thumbsButtonDown {
+  transform: translate(0, -300px);
+}
+
+.centerOffsetAndRotation {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  animation: continuousRotateAndOffset 20s linear infinite;
+}
+
+@keyframes continuousRotateAndOffset {
+  0% {
+      transform: translate(-50%, -50%) translateY(-80px) rotate(360deg);
+  }
+  100% {
+      transform: translate(-50%, -50%) translateY(-80px) rotate(0);
+  }
 }

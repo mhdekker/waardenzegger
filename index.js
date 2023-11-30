@@ -12,17 +12,17 @@ const io = socketIo(server);
 
 let stateTimeout; 
 
-let activeSensors = {};
+let activeSensors = [0, 0, 0, 0];
 let touchCheckTimeout = null;
 let chosenOne;
 let dillemaOption1;
 let dillemaOption2;
-let chosenDillema;
 
 app.use(express.static('public'));
 
 function runPythonScript() {
     const pythonProcess = spawn('sudo', ['python3', '/home/martijn/waardenzegger/handler.py']);
+    //const pythonProcess2 = spawn('sudo', ['python3', '/home/martijn/waardenzegger/stripHandler.py']);
 
     pythonProcess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
@@ -35,7 +35,22 @@ function runPythonScript() {
     pythonProcess.on('close', (code) => {
         console.log(`Python script exited with code ${code}`);
     });
+
+    // pythonProcess2.stdout.on('data', (data) => {
+    //     console.log(`stdout: ${data}`);
+    // });
+
+    // pythonProcess2.stderr.on('data', (data) => {
+    //     console.error(`stderr: ${data}`);
+    // });
+
+    // pythonProcess2.on('close', (code) => {
+    //     console.log(`Python script exited with code ${code}`);
+    // });
 }
+
+
+io.emit('turn_off_all_leds');
 
 // Optional: Explicitly set up route for node_modules if you need to serve files directly from it
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
@@ -64,11 +79,8 @@ function pickNewDilemmas() {
     console.log("Dillema's set! " + dillemas);
 }
 
-// Call the function once to set the initial dilemmas
-pickNewDilemmas();
-
 let state = {
-    currentState: 'state4',
+    currentState: 'state1',
     states: {
         state0: {
             //Time out
@@ -91,7 +103,7 @@ let state = {
             color: 'blue',
             text: 'Leg je hand op de paarse hand voor je',
             nextAction: 'timerTouch',  // A simulated sensor input triggers the next state
-            timerDuration: 8000
+            timerDuration: 2000
             //nextAction: 'buttonPress'  // Defines what should trigger the next state
         },
         state3: {
@@ -101,7 +113,7 @@ let state = {
             ledAction: '1',
             text: 'Ik kies nu iemand uit...',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
-            timerDuration: 5000        // 5 seconds
+            timerDuration: 6000        // 5 seconds
         },
         state4: {
             //Twee dillema's verschijnen, de uitgekozen persoon kiest er een
@@ -141,40 +153,47 @@ let state = {
             nextAction: 'buttonPress',   
         },
         state9: {
-            //Er wordt opnieuw een participant gekozen
+            //Welk dillema kies jij bij jouw waarde? 
             name: 'state9',
             color: 'blue',
-            ledAction: '5',
+            text: 'Hoe ga je met dit dillema om',
+            nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
+        },
+        state10: {
+            //Leg je handen weer op de sensor
+            name: 'state10',
+            color: 'blue',
             text: 'Ik kies nu weer iemand uit...',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
             timerDuration: 5000        // 5 seconds
         },
-        state10: {
-            //Vraag: Hoe ga je met dit dillema om?
-            name: 'state10',
-            color: 'blue',
-            text: 'Hoe ga je met dit dillema om',
-            nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
-            timerDuration: 10000        // 10 seconds
-        },
         state11: {
-            //Vraag: Wie zijn er bij betrokken?
+            //De waardenzegger kiest 1 deelnemer uit om een dilemma te kiezen 
             name: 'state11',
+            color: 'blue',
+            ledAction: '5',
+            text: 'Ik kies nu iemand uit...',
+            nextAction: 'timer',       // Wait for a specified time before moving to the next state
+            timerDuration: 5000        // 5 seconds
+        },
+        state12: {
+            //Waarom?
+            name: 'state12',
             color: 'blue',
             text: 'Wie zijn er bij dit dillema vertrokken',
             nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
             timerDuration: 10000        // 10 seconds
         },
-        // state12: {
-        //     //Zelf een dillema toevoegen!
-        //     name: 'state12',
-        //     color: 'blue',
-        //     text: 'end',
-        //     nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
-        // },
-        state12: {
+        state13: {
+            //Zelf een dillema toevoegen!
+            name: 'state13',
+            color: 'blue',
+            text: 'end',
+            nextAction: 'buttonPress',       // Wait for a specified time before moving to the next state
+        },
+        state14: {
             //Einde, bedankt
-            name: 'state12',
+            name: 'state14',
             color: 'blue',
             text: 'end',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
@@ -196,14 +215,6 @@ const stateTransition = (currentStateName, nextStateName) => {
         startTimerTouch();
     }
 
-    if (nextState.ledAction === '1') {
-        ledController.chooseParticipant(1);
-    }
-
-    if (nextState.ledAction === '5') {
-        ledController.chooseParticipant(5);
-    }
-
     // Immediately update the current state and inform all clients
     state.currentState = nextStateName;
     io.emit('stateUpdate', nextState);
@@ -218,12 +229,17 @@ const stateTransition = (currentStateName, nextStateName) => {
         }, nextState.timerDuration);
     }
 
+    if (nextStateName == 'state4') {
+        pickNewDilemmas();
+    }
+
     // Reset the global timeout every time a state transition occurs
     clearTimeout(stateTimeout);  // Clear any existing timeout
+
     if (nextStateName !== 'state1') { 
         stateTimeout = setTimeout(() => {
             stateTransition(state.currentState, 'state0');  // Transition to state0 after 90 seconds
-        }, 9000000);  // Set new timeout for 90 seconds
+        }, 900000);  // Set new timeout for 90 seconds
     }
 };
 
@@ -239,6 +255,7 @@ function getNextStateName(currentStateName) {
         return nextStateName;
     } else {
         console.error("Next state does not exist, going back to 1");
+        io.emit('turn_off_all_leds');
         return 'state1'; // going back to the start'
     }
 }
@@ -246,33 +263,58 @@ function getNextStateName(currentStateName) {
 function startTimerTouch() {
     touchCheckTimeout = setTimeout(() => {
         // After 15 seconds, decide the next state based on sensors touched
-        checkSensorsAfterTime();
+        const touchedSensorsCount = activeSensors.filter(status => status === 1).length;
+    
+        // Log the sensor touch status
+        console.log(`Sensor touch status: [${activeSensors.join(', ')}]`);
+    
+        // Decide the next state based on the number of sensors touched
+        if (touchedSensorsCount <= 1) {
+            stateTransition(state.currentState, 'state1');
+        } else {
+            stateTransition(state.currentState, getNextStateName(state.currentState));
+        }
+
+        chosenOne = chooseRandomTouchedSensor(activeSensors);
+        console.log("Participant chosen: " + chosenOne);
+        io.emit('chosenOne', chosenOne);
+
+        // Reset the touch check state
+        activeSensors = [0,0,0,0];
+        touchCheckTimeout = null;
+
+        switch(chosenOne) {
+            case 0:
+                io.emit('choose_participant', { number_of_final_led: 5 });
+                break;
+            case 1:
+                io.emit('choose_participant', { number_of_final_led: 1 });
+                break;
+            case 2:
+                io.emit('choose_participant', { number_of_final_led: 13 });
+                break;
+            case 3:
+                io.emit('choose_participant', { number_of_final_led: 9 });
+                break;
+            default: 
+        }
         // Call the function once to set the initial dilemmas
-    }, 15000);  // 15 seconds
+    }, 10000);  // 15 seconds
 }
 
-function checkSensorsAfterTime() {
-    const touchedSensorsCount = Object.keys(activeSensors).length;
+function chooseRandomTouchedSensor(sensors) {
+    // Filter to get the indices of touched sensors
+    const touchedSensors = sensors.map((status, index) => status === 1 ? index : -1).filter(index => index !== -1);
 
-    // Build the sensor touch status array
-    const sensorsStatus = [];
-    for (let i = 0; i <= 3; i++) {
-        sensorsStatus[i] = activeSensors[i] ? 1 : 0;
+    // Check if there are any touched sensors
+    if (touchedSensors.length <= 0) {
+        return null; // Or handle the case when no sensor is touched
     }
 
-    // Log the sensor touch status
-    console.log(`Sensor touch status: [${sensorsStatus.join(', ')}]`);
-
-    // Decide the next state based on the number of sensors touched
-    if (touchedSensorsCount <= 1) {
-        stateTransition(state.currentState, 'state1');
-    } else {
-        stateTransition(state.currentState, getNextStateName(state.currentState));
-    }
-
-    // Reset the touch check state
-    activeSensors = {};
-    touchCheckTimeout = null;
+    // Select a random touched sensor
+    const randomIndex = Math.floor(Math.random() * touchedSensors.length);
+    //return touchedSensors[randomIndex];
+    return touchedSensors[randomIndex];
 }
 
 io.on('connection', (socket) => {
@@ -284,13 +326,12 @@ io.on('connection', (socket) => {
         stateTransition(state.currentState, getNextStateName(state.currentState));
     });
 
-    socket.emit('choose_participant', { message: 'Trigger Python function' });
-
     socket.on('touch_event', (data) => {
         // Now you can use data.sensor_id and data.state
         if (data.state === 'touched') {
             console.log(`Sensor ${data.sensor_id} was touched`);
-            // Add your logic here
+            //socket.emit('turnOnLed', {ring_number: 1, color: 'WHITE'});
+            activeSensors[data.sensor_id] = 1;
         } else if (data.state === 'untouched') {
             console.log(`Sensor ${data.sensor_id} was untouched`);
             // Add logic to handle the sensor being untouched
