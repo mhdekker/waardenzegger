@@ -120,7 +120,7 @@ button {
 
 .curved-text span{
   min-width:0.5em;
-  text-align:center;
+  text-align: center;
   padding:0;
   margin:0;
 }
@@ -369,8 +369,22 @@ button {
   }
 }
 
+.theEyeContainer {
+  animation: chooseTheChosenOne 6s linear;
+}
+
 .theEye {
-  transform: rotate(90deg);
+  transform: translate(-127.5px,300px) rotate(90deg);
+}
+
+@keyframes chooseTheChosenOne {
+  from {
+    transform: rotate(-720deg);
+  }
+
+  to {
+    transform: rotate(0);
+  }
 }
 
 .thumbsButtonContainer {
@@ -381,7 +395,7 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(0deg);
+  transform: translateX(60px) rotate(180deg);
 }
 
 .thumbsButton1 {
@@ -389,7 +403,7 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(90deg);
+  transform: translateY(-60px) rotate(90deg);
 }
 
 .thumbsButton2 {
@@ -397,7 +411,7 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(180deg);
+  transform: translateX(-60px) rotate(0deg);
 }
 
 .thumbsButton3 {
@@ -405,21 +419,47 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(270deg);
+  transform: translateY(60px) rotate(270deg);
 }
 
 .thumbsButtonUp {
-  transform: translate(0, -300px);
+  position: absolute;
+  transform: translate(-100px, 260px);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;    
+  align-items: center;
+}
+
+.thumbsButtonNiet {
+  position: absolute;
+  transform: translate(0, 270px);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .thumbsButtonDown {
-  transform: translate(0, -300px);
+  position: absolute;
+  transform: translate(100px, 280px);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dontRotatePlease {
+  transform: rotate(0deg);
 }
 
 .centerOffsetAndRotation {
   margin: 0;
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 50%;
   animation: continuousRotateAndOffset 20s linear infinite;
 }
@@ -431,4 +471,109 @@ button {
   100% {
       transform: translate(-50%, -50%) translateY(-80px) rotate(0);
   }
+}
+
+.heightOffSetThumbs {
+  transform: translateY(-50px) scale(0.8);
+}
+
+svg.timer_circle {
+  z-index: 2;
+  /* transform: rotate(-90deg);		 	 */
+}
+
+.circle_animation {
+  stroke-dasharray: 4059; /* this value is the pixel circumference of the circle */
+  stroke-dashoffset: 4059;
+  transition: all 1s linear;
+  stroke: #ffffff;
+  box-sizing: border-box;
+}
+
+
+/* Keyboard -------- */
+textarea, textarea:focus-visible {
+  position: absolute;
+  transform: translate(-300px, 300px);
+  width: 600px;
+  height: 150px;
+  border-style: none; 
+  border-color: Transparent; 
+  overflow: auto;    
+  resize: none;
+  box-shadow: none;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.keyboard {
+  position: fixed;
+  left: 0;
+  bottom: 300px;
+  width: 100%;
+  padding: 5px 0;
+  /* background: #312783; */
+  user-select: none;
+  transition: bottom 0.4s;
+}
+
+.keyboard--hidden {
+  bottom: -100%;
+}
+
+.keyboard__keys {
+  text-align: center;
+}
+
+.keyboard__key {
+  height: 45px;
+  width: 4.5%;
+  max-width: 90px;
+  margin: 3px;
+  border-radius: 4px;
+  border: none;
+  background: #C87CFF;
+  color: #ffffff;
+  font-size: 1.05rem;
+  outline: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: top;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.keyboard__key:active {
+  background: #C87CFF
+}
+
+.keyboard__key--wide {
+  width: 12%;
+}
+
+.keyboard__key--extra-wide {
+  width: 36%;
+  max-width: 500px;
+}
+
+.keyboard__key--activatable::after {
+  content: '';
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+}
+
+.keyboard__key--active::after {
+  background: #C87CFF;
+}
+
+.keyboard__key--dark {
+  background: rgba(0, 0, 0, 0.25);
 }

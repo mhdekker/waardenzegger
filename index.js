@@ -12,7 +12,7 @@ const io = socketIo(server);
 
 let stateTimeout; 
 
-let activeSensors = [0, 0, 0, 0];
+let activeSensors = [1, 1, 0, 0];
 let touchCheckTimeout = null;
 let chosenOne;
 let dillemaOption1;
@@ -103,7 +103,7 @@ let state = {
             color: 'blue',
             text: 'Leg je hand op de paarse hand voor je',
             nextAction: 'timerTouch',  // A simulated sensor input triggers the next state
-            timerDuration: 2000
+            timerDuration: 100000
             //nextAction: 'buttonPress'  // Defines what should trigger the next state
         },
         state3: {
@@ -113,7 +113,7 @@ let state = {
             ledAction: '1',
             text: 'Ik kies nu iemand uit...',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
-            timerDuration: 6000        // 5 seconds
+            timerDuration: 7000        // 6 seconds
         },
         state4: {
             //Twee dillema's verschijnen, de uitgekozen persoon kiest er een
@@ -165,7 +165,7 @@ let state = {
             color: 'blue',
             text: 'Ik kies nu weer iemand uit...',
             nextAction: 'timer',       // Wait for a specified time before moving to the next state
-            timerDuration: 5000        // 5 seconds
+            timerDuration: 10000        // 5 seconds
         },
         state11: {
             //De waardenzegger kiest 1 deelnemer uit om een dilemma te kiezen 
@@ -273,14 +273,16 @@ function startTimerTouch() {
             stateTransition(state.currentState, 'state1');
         } else {
             stateTransition(state.currentState, getNextStateName(state.currentState));
-        }
+        };
+
+        io.emit('activeSensors', activeSensors);
 
         chosenOne = chooseRandomTouchedSensor(activeSensors);
         console.log("Participant chosen: " + chosenOne);
         io.emit('chosenOne', chosenOne);
 
         // Reset the touch check state
-        activeSensors = [0,0,0,0];
+        activeSensors = [0,0,1,1];
         touchCheckTimeout = null;
 
         switch(chosenOne) {
@@ -313,8 +315,9 @@ function chooseRandomTouchedSensor(sensors) {
 
     // Select a random touched sensor
     const randomIndex = Math.floor(Math.random() * touchedSensors.length);
-    //return touchedSensors[randomIndex];
+    
     return touchedSensors[randomIndex];
+    //return 2;
 }
 
 io.on('connection', (socket) => {
@@ -331,11 +334,22 @@ io.on('connection', (socket) => {
         if (data.state === 'touched') {
             console.log(`Sensor ${data.sensor_id} was touched`);
             //socket.emit('turnOnLed', {ring_number: 1, color: 'WHITE'});
-            activeSensors[data.sensor_id] = 1;
+            //activeSensors[data.sensor_id] = 1;
         } else if (data.state === 'untouched') {
             console.log(`Sensor ${data.sensor_id} was untouched`);
             // Add logic to handle the sensor being untouched
         }
+    });
+
+    socket.on('saveToFile', (data) => {
+        const text = data + '\n'; // Append a newline character for the next line
+        fs.appendFile('newTextFile.txt', text, (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.error("succesfully writen to file");
+            }
+        });
     });
 });
 
