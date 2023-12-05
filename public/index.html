@@ -14,6 +14,12 @@
     <script type="text/javascript" src="/node_modules/circletype/dist/circletype.min.js"></script>
     <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
 
+    <audio id="audio1" src="/assets/sound/1.mp3" type="audio/mp3"></audio>
+    <audio id="audio2" src="/assets/sound/2.mp3" type="audio/mp3"></audio>
+    <audio id="audio3" src="/assets/sound/3.mp3" type="audio/mp3"></audio>
+    <audio id="audio4" src="/assets/sound/4.mp3" type="audio/mp3"></audio>
+    <audio id="audio6" src="/assets/sound/6.mp3" type="audio/mp3"></audio>
+
     <div class="container">
 
         <div class="circle">
@@ -36,9 +42,9 @@
             <div id="state2" class="state">
                 <h1 class="isCentered" >Leg jullie hand op de hand voor je. De Waardenzegging gaat nu beginnen!</h1>
                 <img class="isCentered isPulsingAndRotating" src="assets/images/hand.png">
-                <svg width="98%" height="98%" xmlns="http://www.w3.org/2000/svg" class="timer_circle isCentered">
+                <svg width="99%" height="99%" xmlns="http://www.w3.org/2000/svg" class="timer_circle isCentered">
                     <g>
-                     <circle id="circle" class="circle_animation" r="48%" cy="50%" cx="50%" border-sizing="border-box"; stroke-width="20" stroke ='#ffffff' fill="none"/>
+                     <circle id="circle" class="circle_animation" r="49.5%" cy="50%" cx="50%" border-sizing="border-box"; stroke-width="15" stroke ='#ffffff' fill="none"/>
                     </g>
                 </svg>
             </div>
@@ -126,16 +132,61 @@
             <!-- State 9 -->
             <div id="state9" class="state">
                 <h1 class="isCentered">Kies de stelling die het beste past bij de waarde voor je?</h1>
-                <button class="isCentered" onclick="nextButtonPressed()"> verder </button>
+                <div class="dontRotatePlease isCentered">
+                    <div class="stellingBijWaarde0">
+                        <div class="stellingBijWaardeContainer">
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel1"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze1" onclick="toggleWaardeBijStelling(0, '1')()"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                            <div class="stellingBijWaardeTitelWoord"> 
+                                <h6>OF</h6>
+                            </div>
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel2"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze2" onclick="toggleWaardeBijStelling(0, '2')"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                        </div>
+                    </div>
+                    <div class="stellingBijWaarde1">
+                        <div class="stellingBijWaardeContainer ">
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel1"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze1" onclick="toggleWaardeBijStelling(1, '1')"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                            <div class="stellingBijWaardeTitelWoord"> 
+                                <h6>OF</h6>
+                            </div>
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel2"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze2" onclick="toggleWaardeBijStelling(1, '2')"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                        </div>
+                    </div>
+                    <div class="stellingBijWaarde2">
+                        <div class="stellingBijWaardeContainer ">
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel1"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze1" onclick="toggleWaardeBijStelling(2, '1')"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                            <div class="stellingBijWaardeTitelWoord"> 
+                                <h6>OF</h6>
+                            </div>
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel2"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze2" onclick="toggleWaardeBijStelling(2, '2')"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                        </div>
+                    </div>
+                    <div class="stellingBijWaarde3">
+                        <div class="stellingBijWaardeContainer ">
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel1"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze1" onclick="toggleWaardeBijStelling(3, '1')"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                            <div class="stellingBijWaardeTitelWoord"> 
+                                <h6>OF</h6>
+                            </div>
+                            <div class="stellingBijWaardeTitel stellingBijWaardeTitel2"><p>Titel</p></div>
+                            <button class="stellingBijWaardeTitelKeuze2" onclick="toggleWaardeBijStelling(3, '2')"><img class="stellingBijWaardeImage" src="assets/dilemmas/1.png"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- State 10 -->
             <div id="state10" class="state">
                 <h1 class="isCentered" >Leg jullie handen weer op de handjes</h1>
                 <img class="isCentered isPulsingAndRotating" src="assets/images/hand.png">
-                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="timer_circle isCentered">
+                <svg width="99%" height="99%" xmlns="http://www.w3.org/2000/svg" class="timer_circle isCentered">
                     <g>
-                     <circle id="circle" class="circle_animation" r="48%" cy="50%" cx="50%" border-sizing="border-box"; stroke-width="20" stroke ='#ffffff' fill="none"/>
+                     <circle id="circle" class="circle_animation" r="49.5%" cy="50%" cx="50%" border-sizing="border-box"; stroke-width="15" stroke ='#ffffff' fill="none"/>
                     </g>
                 </svg>
             </div>
@@ -164,7 +215,7 @@
                 <h1 class="isCentered">Tijd om de Waardenzegger te voeden. Welk digitaal dilemma hebben jullie zelf weleens meegemaakt?</h1>
                 <textarea id="nieuweVoeding" class="use-keyboard-input" placeholder="Typ hier het dillema kort in"></textarea>
                 <div class="bottomButtonContainer isCentered">
-                    <button onclick="saveInputToFile()" class="bottomButton"><p class="bottomButtonText">Verder</p></button>
+                    <button onclick="saveInputToFile()" class="bottomButton"><p class="bottomButtonText">Verstuur</p></button>
                 </div>              
             </div>
 
@@ -183,10 +234,14 @@
     <script>
         const socket = io();
         let chosenOne;
+        let chosenOne2;
         let dillemaNumber = [];
         let dillemasText = [];
         let activeSensors = [0,0,0,0];
         let thumbsPressed = [0,0,0,0];
+        let waardeBijStelling = [0,0,0,0];
+        let waardeBijStellingKeuzes = [0,0,0,0];
+        let stateUpdateCount = 0;
 
         var beginState= {
             name: 'state1'
@@ -195,33 +250,62 @@
         socket.on('chosenOne', (_chosenOne) => {
             chosenOne = _chosenOne;
             switch(_chosenOne) {
-                case 0:
+                case 1:
                     $( ".circle" ).css( "transform", "rotate(180deg)" );
                     $( ".dontRotatePlease" ).css( "transform", "rotate(-180deg)" );
-                    console.log("Rotation set to: 0");
-
                     break;
-                case 1:
+                case 0:
                     $( ".circle" ).css( "transform", "rotate(90deg)" );
                     $( ".dontRotatePlease" ).css( "transform", "rotate(-90deg)" );
-                    console.log("Rotation set to: 1");
-
                     break;
                 case 2:
                     $( ".circle" ).css( "transform", "rotate(0deg)" );
                     $( ".dontRotatePlease" ).css( "transform", "rotate(0deg)" );
-                    console.log("Rotation set to: 2");
-
                     break;
                 case 3:
                     $( ".circle" ).css( "transform", "rotate(270deg)" );
                     $( ".dontRotatePlease" ).css( "transform", "rotate(-270deg)" );
-                    console.log("Rotation set to: 3");
-
                     break;
                 default: 
                 $( ".circle" ).css( "transform", "rotate(0)" );
             }
+        });
+
+        socket.on('chosenOne2', (_chosenOne2) => {
+            chosenOne2 = _chosenOne2;
+            switch(chosenOne2) {
+                case 1:
+                    $( ".circle" ).css( "transform", "rotate(180deg)" );
+                    $( ".dontRotatePlease" ).css( "transform", "rotate(-180deg)" );
+                    break;
+                case 0:
+                    $( ".circle" ).css( "transform", "rotate(90deg)" );
+                    $( ".dontRotatePlease" ).css( "transform", "rotate(-90deg)" );
+                    break;
+                case 2:
+                    $( ".circle" ).css( "transform", "rotate(0deg)" );
+                    $( ".dontRotatePlease" ).css( "transform", "rotate(0deg)" );
+                    break;
+                case 3:
+                    $( ".circle" ).css( "transform", "rotate(270deg)" );
+                    $( ".dontRotatePlease" ).css( "transform", "rotate(-270deg)" );
+                    break;
+                default: 
+                $( ".circle" ).css( "transform", "rotate(0)" );
+            }
+
+            console.log("chosenOne2: " + chosenOne2);
+            console.log(waardeBijStellingKeuzes);
+            console.log(dillemaNumber[0]);
+            console.log(dillemaNumber[waardeBijStellingKeuzes[chosenOne2]-1]);
+            console.log(dillemasText[dillemaNumber[waardeBijStellingKeuzes[chosenOne2]]-1]-1);
+
+            $('.dillemaKeuze-5 img').each(function() {
+                $(this).attr('src', "/assets/dilemmas/" + dillemaNumber[waardeBijStellingKeuzes[chosenOne2]-1] + ".png");
+            });
+            $('.dillemaKeuze-5 p').each(function() {
+                $(this).text(dillemasText[dillemaNumber[waardeBijStellingKeuzes[chosenOne2]-1]-1]);
+            });
         });
 
         socket.on('dillemas', (dillemas) => {
@@ -231,8 +315,13 @@
             
             $('.dillemaKeuze img').eq(0).attr('src', "/assets/dilemmas/" + dillemaNumber[0] + ".png");
             $('.dillemaKeuze img').eq(1).attr('src', "/assets/dilemmas/" + dillemaNumber[1] + ".png");
-            console.log("img1 " + dillemaNumber[0]);
-            console.log("img2 " + dillemaNumber[1]);
+
+            $('.stellingBijWaardeContainer').each(function(index) {
+                // Assuming dillemaNumber is an array with enough elements
+                // and each stellingBijWaardeContainer contains an img tag
+                $(this).find('img').eq(0).attr('src', "/assets/dilemmas/" + dillemaNumber[0] + ".png");
+                $(this).find('img').eq(1).attr('src', "/assets/dilemmas/" + dillemaNumber[1] + ".png");
+            });
         });
 
         socket.on('dillemasText', (_dillemasText) => {
@@ -240,18 +329,83 @@
 
             $('.dillemaKeuze p').eq(0).text(dillemasText[dillemaNumber[0]-1]);
             $('.dillemaKeuze p').eq(1).text(dillemasText[dillemaNumber[1]-1]);
-            console.log("text1 " + dillemaNumber[0]-1);
-            console.log("text2 " + dillemaNumber[1]-1);
+
+
+            $('.stellingBijWaardeContainer').each(function(index) {
+                // Assuming dillemaNumber is an array with enough elements
+                // and each stellingBijWaardeContainer contains an img tag
+                $(this).find('p').eq(0).text(dillemasText[dillemaNumber[0]-1]);
+                $(this).find('p').eq(1).text(dillemasText[dillemaNumber[1]-1]);
+            }); 
         })
 
         socket.on('test', (test) => {
             // Update the UI based on newState
-            console.log("test: " + test);
         });
 
         socket.on('stateUpdate', (newState) => {
+            stateUpdateCount++;
+            if (stateUpdateCount > 1) {
+                switch (currentState) {
+                    case 'state1':
+                        // Insert logic for handling state1
+                        playAudio(1);
+                        break;
+                    case 'state2':
+                        // Insert logic for handling state2
+                        playAudio(2);
+                        break;
+                    case 'state3':
+                        // Insert logic for handling state3
 
-            $('.state.active').fadeOut('5000', function() {
+                        break;
+                    case 'state4':
+                        // Insert logic for handling state4
+                        playAudio(3);
+                        break;
+                    case 'state5':
+                        // Insert logic for handling state5
+
+                        break;
+                    case 'state6':
+                        // Insert logic for handling state6
+                        playAudio(4);
+                        break;
+                    case 'state7':
+                        // Insert logic for handling state7
+
+                        break;
+                    case 'state8':
+                        // Insert logic for handling state8
+                        playAudio(6);
+                        break;
+                    case 'state9':
+                        // Insert logic for handling state9
+
+                        break;
+                    case 'state10':
+                        // Insert logic for handling state10
+                        playAudio(2);
+                        break;
+                    case 'state11':
+                        // Insert logic for handling state11
+
+                        break;
+                    case 'state12':
+                        // Insert logic for handling state12
+
+                        break;
+                    case 'state13':
+                        // Insert logic for handling state13
+                        playAudio(1);
+                        break;
+                    default:
+
+                    break;
+                }
+            }
+
+            // $('.state.active').fadeOut('5000', function() {
                 //Update the UI based on the new stat
                 updateUI(newState);
 
@@ -267,15 +421,11 @@
                 } else {
                     document.querySelector(".keyboard").classList.add("keyboard--hidden");
                 }
-
-                //Log the current state
-                console.log(`Moved to state: ${newState.name}`);
-            });
+            // });
         });
 
         socket.on('activeSensors', (_activeSensors) => {
             activeSensors = _activeSensors;
-            console.log(activeSensors)
             updateButtonVisibility(activeSensors);
         });
 
@@ -285,6 +435,7 @@
                 if (activeSensors[i] === 0) {
                     // Construct the class name for the corresponding div
                     const divClassName = 'thumbsButton' + i;
+                    const divClassName2 = 'stellingBijWaarde' + i;
 
                     // Find the div by its class name
                     const div = document.querySelector('.' + divClassName);
@@ -293,15 +444,30 @@
                         div.style.display = 'none';
                         thumbsPressed[i] = 1;
                     }
+
+                    const div2 = document.querySelector('.' + divClassName2);
+                    if (div2) {
+                        // Set the display property to none
+                        div2.style.display = 'none';
+                        waardeBijStelling[i] = 1;
+                    }
                 } else if (activeSensors[i] === 1) {
                     const divClassName = 'thumbsButton' + i;
+                    const divClassName2 = 'stellingBijWaarde' + i;
 
                     // Find the div by its class name
                     const div = document.querySelector('.' + divClassName);
+                    const div2 = document.querySelector('.' + divClassName2);
+
                     if (div) {
                         // Set the display property to none
                         div.style.display = 'block';
-                        thumbsPressed[i] = 1;
+                        thumbsPressed[i] = 0;
+                    }
+                    if (div2) {
+                        // Set the display property to none
+                        div2.style.display = 'block';
+                        waardeBijStelling[i] = 0;
                     }
                 }
             }
@@ -358,7 +524,6 @@
             $letters.css({
                 position: "absolute",
                 height:`${radius}px`,
-                //backgroundColor:"orange",
                 transformOrigin:"bottom center"
             });
             
@@ -399,7 +564,6 @@
 
         function toggleButtons(set, buttonType) {
             // Select the container of the clicked button set
-            console.log(set + " - " + buttonType);
             var container = document.querySelector('.thumbsButton' + set);
 
             // Hide other buttons based on the buttonType
@@ -409,11 +573,74 @@
                 }
             });
             thumbsPressed[set] = 1;
-            console.log(thumbsPressed);
 
             if (thumbsPressed.every(value => value === 1)) {
+                for (let i = 0; i < 5; i++) {
+                    document.querySelectorAll('.thumbsButton' + i + ' button').forEach(function(btn) {
+                        btn.style.display = 'block'; // This resets the display property to default
+                    });
+                }
                 thumbsPressed = [0,0,0,0];
                 nextButtonPressed();
+            }
+        }
+
+        function toggleWaardeBijStelling(set, stellingType) {
+            // Select the specific container of the clicked button
+            var container = document.querySelector('.stellingBijWaarde' + set + ' > .stellingBijWaardeContainer');
+
+            waardeBijStellingKeuzes[set] = parseInt(stellingType);
+            console.log(waardeBijStellingKeuzes);
+
+            // Hide the word in the middle
+            var middleWord = container.querySelector('.stellingBijWaardeTitelWoord');
+            if (middleWord) {
+                middleWord.style.display = 'none';
+            }
+
+            // Hide the non-selected button and its corresponding title
+            container.querySelectorAll('.stellingBijWaardeTitel, button').forEach(function(element) {
+                if (!element.classList.contains('stellingBijWaardeTitel' + stellingType) && 
+                    !element.classList.contains('stellingBijWaardeTitelKeuze' + stellingType)) {
+                    element.style.display = 'none';
+                }
+            });
+
+            waardeBijStelling[set] = 1;
+
+            if (waardeBijStelling.every(value => value === 1)) {
+                // Reset display of all titles and buttons
+                document.querySelectorAll("[class^='stellingBijWaardeTitel']").forEach(function(element) {
+                    element.style.display = 'block'; // Resets the display property to block
+                });
+
+                // Also reset the middle word
+                if (middleWord) {
+                    middleWord.style.display = 'block'; // Reset the display of the middle word
+                }
+
+                waardeBijStelling = [0,0,0,0];
+                nextButtonPressed();
+                // setLastDillema();
+            }
+        }
+
+        function setLastDillema() {
+            $('.dillemaKeuze-5 img').each(function() {
+                $(this).attr('src', "/assets/dilemmas/" + dillemaNumber[waardeBijStellingKeuzes[choseOne]] + ".png");
+            });
+            $('.dillemaKeuze-5 p').each(function() {
+                $(this).text(dillemasText[dillemaNumber[waardeBijStellingKeuzes[choseOne]]-1]);
+            });
+        }
+
+
+        function playAudio(number) {
+            var audio = document.getElementById('audio' + number);
+            if (audio) {
+                audio.play();
+            } else {
+                console.error('Audio element not found');
             }
         }
 
@@ -585,8 +812,6 @@
 
         window.addEventListener("DOMContentLoaded", function () {
             Keyboard.init();
-
-            console.log("Hey baby!");
         });
         </script>
 </body>

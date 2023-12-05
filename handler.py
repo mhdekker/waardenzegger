@@ -9,7 +9,7 @@ import threading
 
 # LED strip configuration:
 LED_COUNT = 128          # Number of LED lights on the strip
-LED_COUNT2 = 60          # Number of LED lights on the strip
+LED_COUNT2 = 20          # Number of LED lights on the strip
 LED_PIN = 18             # GPIO pin connected to the LED strip pixels (must support PWM)
 LED_PIN2 = 21            # GPIO pin connected to the LED strip pixels (must support PWM)
 LED_FREQ_HZ = 800000     # Frequency of the LED signal (should be 800kHz)
@@ -165,15 +165,23 @@ def handle_choose_participant(data):
     choose_participant(strip, number_of_final_led)
 
 def choose_participant(strip, number_of_final_led):
+    # Variables for total time and number of LEDs
+    total_time = 6.5  # Total time in seconds, adjust as needed
+    number_of_leds = 60  # Total number of LEDs to cycle through, adjust as needed
+
     # Ensure the provided LED number is within the valid range
-    # if number_of_final_led < 0 or number_of_final_led >= len(ring_mapping):
-    #     raise ValueError("Invalid LED number. Must be within the range of available rings.")
+    if number_of_final_led < 0 or number_of_final_led >= len(ring_mapping):
+        raise ValueError("Invalid LED number. Must be within the range of available rings.")
+
+    # Calculate time each LED should be on
+    time_per_led = total_time / number_of_leds
+
     current_ring = number_of_final_led
 
-    for x in range(32):
+    for x in range(number_of_leds+1):
         # Turn on the current ring
         turnOnLed(strip, current_ring, PURPLE)
-        time.sleep(0.2)  # Time the ring stays on
+        time.sleep(time_per_led)  # Time the ring stays on
         
         # Turn off the current ring before moving to the next
         turnOnLed(strip, current_ring, Color(0, 0, 0))
@@ -190,6 +198,10 @@ def choose_participant(strip, number_of_final_led):
 i2c = busio.I2C(board.SCL, board.SDA)
 mpr121 = adafruit_mpr121.MPR121(i2c)
 last_state = [False] * 4
+
+for i in range(4):
+    mpr121[i].threshold = 30
+    mpr121[i].release_threshold = 6
 
 try:
     while True:
@@ -263,4 +275,3 @@ except KeyboardInterrupt:
     sio.disconnect()  # Disconnect from Socket.IO server
     turn_off_all_leds(strip)
     turn_off_all_leds(strip2)
-

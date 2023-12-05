@@ -214,11 +214,11 @@ button {
   grid-template-rows: 150px 150px 300px;
 }
 
-.dillemaKeuze2 {
+/* .dillemaKeuze2 {
   display: grid;
   grid-template-columns: 350px 100px 350px;
   grid-template-rows: 0px 150px 300px;
-}
+} */
 
 .dillemaKeuze1 {
   grid-column: 1;
@@ -370,7 +370,7 @@ button {
 }
 
 .theEyeContainer {
-  animation: chooseTheChosenOne 6s linear;
+  animation: chooseTheChosenOne 6.5s linear;
 }
 
 .theEye {
@@ -379,7 +379,7 @@ button {
 
 @keyframes chooseTheChosenOne {
   from {
-    transform: rotate(-720deg);
+    transform: rotate(-1440deg);
   }
 
   to {
@@ -395,7 +395,7 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translateX(60px) rotate(180deg);
+  transform: translateY(-60px) rotate(90deg);
 }
 
 .thumbsButton1 {
@@ -403,7 +403,7 @@ button {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translateY(-60px) rotate(90deg);
+  transform: translateX(60px) rotate(180deg);
 }
 
 .thumbsButton2 {
@@ -477,6 +477,93 @@ button {
   transform: translateY(-50px) scale(0.8);
 }
 
+.stellingBijWaarde0 {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.stellingBijWaarde1 {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.stellingBijWaarde2 {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.stellingBijWaarde3 {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.stellingBijWaardeContainer {
+  display: grid;
+  grid-template-columns: 150px 20px 150px;
+  grid-template-rows: 50px 50px 120px;
+  transform: translateY(280px) scale(1)
+}
+
+/* .dillemaKeuze2 {
+  display: grid;
+  grid-template-columns: 350px 100px 350px;
+  grid-template-rows: 0px 150px 300px;
+} */
+
+.stellingBijWaardeTitelKeuze1 {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.stellingBijWaardeTitelKeuze2 {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.stellingBijWaardeTitelWoord {
+  grid-column: 2;
+  grid-row: 3;
+  align-self: center;
+  justify-self: center;
+}
+
+.stellingBijWaardeTitelWoord > h6 {
+  font-size: 15px;
+}
+
+.stellingBijWaardeTitel {
+  background: white;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  width: 100%;
+  z-index: 2;
+  padding: 12px;
+}
+
+.stellingBijWaardeTitel > p {
+  font-size: 15px;
+}
+
+.stellingBijWaardeTitel1 {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  justify-self: center;
+}
+
+.stellingBijWaardeTitel2 {
+  grid-column: 3;
+  grid-row: 2;
+  align-self: end;
+  justify-self: center;
+}
+
+.stellingBijWaardeImage {
+  width: 100%;
+  transform: translateY(-30px);
+}
+
 svg.timer_circle {
   z-index: 2;
   /* transform: rotate(-90deg);		 	 */
@@ -547,7 +634,7 @@ textarea, textarea:focus-visible {
 }
 
 .keyboard__key:active {
-  background: #C87CFF
+  background: #E5087E
 }
 
 .keyboard__key--wide {
