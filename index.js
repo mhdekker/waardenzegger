@@ -13,14 +13,17 @@ const io = socketIo(server);
 
 let stateTimeout; 
 
-let activeSensors = [1, 1, 1, 1];
+let activeSensors = [0, 0, 0, 0];
 let touchCheckTimeout = null;
 let chosenOne;
 let chosenOne2;
+let chosenOne3;
 let dillemaOption1;
 let dillemaOption2;
 
 app.use(express.static('public'));
+app.use('/dilemmas', express.static('/media/martijn/HEMA_8GB/dilemmas'));
+
 
 function runPythonScript() {
     const pythonProcess = spawn('sudo', ['python3', '/home/martijn/waardenzegger/handler.py']);
@@ -37,33 +40,6 @@ function runPythonScript() {
     pythonProcess.on('close', (code) => {
         console.log(`Python script exited with code ${code}`);
     });
-
-    // pythonProcess2.stdout.on('data', (data) => {
-    //     console.log(`stdout: ${data}`);
-    // });
-
-    // pythonProcess2.stderr.on('data', (data) => {
-    //     console.error(`stderr: ${data}`);
-    // });
-
-    // pythonProcess2.on('close', (code) => {
-    //     console.log(`Python script exited with code ${code}`);
-    // });
-}
-
-function playAudio(filePath) {
-    const command = `omxplayer "${filePath}"`;
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`stderr: ${stderr}`);
-        return;
-      }
-      console.log(`Played: ${filePath}`);
-    });
 }
 
 io.emit('turn_off_all_leds');
@@ -79,7 +55,7 @@ function formatTextToArray(filePath) {
     return text.split('\n').map(line => line.replace(/^\d+\.\s*/, '').trim());
 }
 
-const sentencesArray = formatTextToArray('public/assets/dilemmas/dillemas.txt');
+const sentencesArray = formatTextToArray('//media/martijn/HEMA_8GB/dilemmas/dillemas.txt');
 console.log(sentencesArray); // This will output the array of sentences
 
 function pickNewDilemmas() {
@@ -257,13 +233,18 @@ const stateTransition = (currentStateName, nextStateName) => {
         io.emit('turn_off_all_leds');
     }
 
+    if(nextStateName == 'state13') {
+        io.emit('turn_off_all_leds');
+    }
+
     // Reset the global timeout every time a state transition occurs
     clearTimeout(stateTimeout);  // Clear any existing timeout
 
     if (nextStateName !== 'state1') { 
         stateTimeout = setTimeout(() => {
-            stateTransition(state.currentState, 'state0');  // Transition to state0 after 90 seconds
-        }, 900000);  // Set new timeout for 90 seconds
+            io.emit('turn_off_all_leds');
+            stateTransition(state.currentState, 'state1');  // Transition to state0 after 90 seconds
+        }, 180000);  // Set new timeout for 90 seconds
     }
 };
 
@@ -348,8 +329,15 @@ function startTimerTouch2() {
         io.emit('activeSensors', activeSensors);
 
         chosenOne2 = chooseRandomTouchedSensor(activeSensors);
+
+        do {
+            chosenOne3 = chooseRandomTouchedSensor(activeSensors);
+        } while (chosenOne3 === chosenOne2);
+
         console.log("Participant chosen2: " + chosenOne2);
         io.emit('chosenOne2', chosenOne2);
+        io.emit('chosenOne3', chosenOne3);
+
         console.log(activeSensors);
 
         // Reset the touch check state
@@ -426,7 +414,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + 'public/index.html');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 server.listen(3000, () => {

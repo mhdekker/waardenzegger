@@ -9,9 +9,9 @@ import threading
 
 # LED strip configuration:
 LED_COUNT = 128          # Number of LED lights on the strip
-LED_COUNT2 = 20          # Number of LED lights on the strip
+# LED_COUNT2 = 20          # Number of LED lights on the strip
 LED_PIN = 18             # GPIO pin connected to the LED strip pixels (must support PWM)
-LED_PIN2 = 21            # GPIO pin connected to the LED strip pixels (must support PWM)
+# LED_PIN2 = 21            # GPIO pin connected to the LED strip pixels (must support PWM)
 LED_FREQ_HZ = 800000     # Frequency of the LED signal (should be 800kHz)
 LED_DMA = 10             # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
@@ -22,7 +22,6 @@ DEBOUNCE_TIME = 5  # 200 milliseconds
 
 last_touch_time = [0, 0, 0, 0]  # Initialize last touch time for each sensor
 
-
 sio = socketio.Client()
 
 # Define colors:
@@ -30,9 +29,9 @@ PURPLE = Color(128, 0, 128)
 WHITE = Color(255,255,255)
 
 strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-strip2 = PixelStrip(LED_COUNT2, LED_PIN2, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
+# strip2 = PixelStrip(LED_COUNT2, LED_PIN2, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
 strip.begin()
-strip2.begin()
+# strip2.begin()
 
 # Map the logical ring numbers to the actual LED indices (you need to define the order here)
 ring_mapping = {
@@ -88,44 +87,44 @@ def disconnect():
 
 sio.connect('http://localhost:3000')  # Replace with your server's URL
 
-def cycle_rgb_on_strip2():
-    """ Cycles through Red, Green, and Blue colors on all LEDs of strip2. """
-    colors = [Color(255, 0, 0), Color(0, 255, 0), Color(0, 0, 255)]  # Red, Green, Blue
+# def cycle_rgb_on_strip2():
+#     """ Cycles through Red, Green, and Blue colors on all LEDs of strip2. """
+#     colors = [Color(255, 0, 0), Color(0, 255, 0), Color(0, 0, 255)]  # Red, Green, Blue
 
-    for color in colors:
-        for i in range(LED_COUNT2):
-            strip2.setPixelColor(i, color)
-        strip2.show()
-        time.sleep(1)  # Wait for 1 second before changing to the next color
+#     for color in colors:
+#         for i in range(LED_COUNT2):
+#             strip2.setPixelColor(i, color)
+#         strip2.show()
+#         time.sleep(1)  # Wait for 1 second before changing to the next color
 
-def purple_pulsation(strip, duration=5, max_brightness=255, min_brightness=0, steps=50):
-    """ Creates a pulsating purple effect on the specified LED strip.
+# def purple_pulsation(strip, duration=5, max_brightness=255, min_brightness=0, steps=50):
+#     """ Creates a pulsating purple effect on the specified LED strip.
     
-    :param strip: The LED strip object.
-    :param duration: Total duration of the effect in seconds.
-    :param max_brightness: Maximum brightness level (0-255).
-    :param min_brightness: Minimum brightness level (0-255).
-    :param steps: Number of steps in the pulsation cycle.
-    """
-    purple = Color(128, 0, 128)  # Purple color
-    step_duration = duration / (2 * steps)  # Time for each brightness step
+#     :param strip: The LED strip object.
+#     :param duration: Total duration of the effect in seconds.
+#     :param max_brightness: Maximum brightness level (0-255).
+#     :param min_brightness: Minimum brightness level (0-255).
+#     :param steps: Number of steps in the pulsation cycle.
+#     """
+#     purple = Color(128, 0, 128)  # Purple color
+#     step_duration = duration / (2 * steps)  # Time for each brightness step
 
-    for _ in range(steps):
-        # Gradually increase brightness
-        for brightness in range(min_brightness, max_brightness, int((max_brightness - min_brightness) / steps)):
-            adjusted_color = Color(brightness // 2, 0, brightness // 2)  # Adjust the purple color brightness
-            for i in range(LED_COUNT2):
-                strip.setPixelColor(i, adjusted_color)
-            strip.show()
-            time.sleep(step_duration)
+#     for _ in range(steps):
+#         # Gradually increase brightness
+#         for brightness in range(min_brightness, max_brightness, int((max_brightness - min_brightness) / steps)):
+#             adjusted_color = Color(brightness // 2, 0, brightness // 2)  # Adjust the purple color brightness
+#             for i in range(LED_COUNT2):
+#                 strip.setPixelColor(i, adjusted_color)
+#             strip.show()
+#             time.sleep(step_duration)
 
-        # Gradually decrease brightness
-        for brightness in range(max_brightness, min_brightness, -int((max_brightness - min_brightness) / steps)):
-            adjusted_color = Color(brightness // 2, 0, brightness // 2)  # Adjust the purple color brightness
-            for i in range(LED_COUNT2):
-                strip.setPixelColor(i, adjusted_color)
-            strip.show()
-            time.sleep(step_duration)
+#         # Gradually decrease brightness
+#         for brightness in range(max_brightness, min_brightness, -int((max_brightness - min_brightness) / steps)):
+#             adjusted_color = Color(brightness // 2, 0, brightness // 2)  # Adjust the purple color brightness
+#             for i in range(LED_COUNT2):
+#                 strip.setPixelColor(i, adjusted_color)
+#             strip.show()
+#             time.sleep(step_duration)
 
 @sio.on('turnOnLed')
 def handle_turn_on_led(data):
@@ -166,8 +165,8 @@ def handle_choose_participant(data):
 
 def choose_participant(strip, number_of_final_led):
     # Variables for total time and number of LEDs
-    total_time = 6.5  # Total time in seconds, adjust as needed
-    number_of_leds = 60  # Total number of LEDs to cycle through, adjust as needed
+    total_time = 6  # Total time in seconds, adjust as needed
+    number_of_leds = 48  # Total number of LEDs to cycle through, adjust as needed
 
     # Ensure the provided LED number is within the valid range
     if number_of_final_led < 0 or number_of_final_led >= len(ring_mapping):

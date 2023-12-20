@@ -379,7 +379,7 @@ button {
 
 @keyframes chooseTheChosenOne {
   from {
-    transform: rotate(-1440deg);
+    transform: rotate(-1080deg);
   }
 
   to {
@@ -659,6 +659,10 @@ textarea, textarea:focus-visible {
 
 .keyboard__key--active::after {
   background: #C87CFF;
+}
+
+.keyboard__key.active-touch {
+  background: #E5087E; /* Or your desired :active state color */
 }
 
 .keyboard__key--dark {
